@@ -501,7 +501,7 @@
                     <div onclick="showCourseDetail('药品经营质量管理规范专业', '赵国强', 'GSP认证专家')" class="card-hover bg-white rounded-[12px] overflow-hidden shadow-[0_2px_12px_rgba(0,0,0,0.06)] flex cursor-pointer click-scale">
                         <div class="relative w-32 h-28 shrink-0">
                             <img src="./png/6.png" class="w-full h-full object-cover object-top" alt="课程封面">
-                            <span class="absolute top-2 left-2 bg-success text-white text-[10px] font-bold px-2 py-0.5 rounded">免费试听</span>
+                            <span class="absolute top-2 left-2 bg-success text-white text-[10px] font-bold px-2 py-0.5 rounded">￥3,200</span>
                         </div>
                         <div class="p-3 flex-1 flex flex-col justify-between">
                             <h4 class="font-bold text-gray-dark text-sm line-clamp-2">药品经营质量管理规范专业</h4>
@@ -632,7 +632,7 @@
                         <div class="flex items-center justify-between bg-white p-2 rounded-[6px] border border-gray-100">
                             <div class="flex items-center gap-1.5">
                                 <i class="fas fa-file-pdf text-warning text-xs"></i>
-                                <span class="text-[10px] text-gray-dark">医学类高等学历直通车.pdf</span>
+                                <span class="text-[10px] text-gray-dark">医药学类高等学历直通车.pdf</span>
                             </div>
                             <button onclick="downloadFile()" class="click-scale text-primary text-[10px] font-medium">下载</button>
                         </div>
@@ -973,7 +973,7 @@
         <div id="courseDetailModal" class="modal-backdrop fixed inset-0 bg-black/50 z-[100] flex items-end justify-center sm:items-center" style="width: 375px; left: 50%; transform: translateX(-50%); display: none;" onclick="if(event.target===this)closeCourseDetail()">
             <div class="bg-white rounded-t-[16px] sm:rounded-[16px] shadow-[0_25px_80px_rgba(0,0,0,0.25)] w-full max-h-[85vh] overflow-hidden animate-slide-up sm:w-[340px]">
                 <div class="relative h-40">
-                    <img id="courseDetailImage" src="" class="w-full h-full object-cover object-top" alt="课程封面">
+                    <img id="courseDetailImage" src="./png/23.png" class="w-full h-full object-cover object-top" alt="课程封面">
                     <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
                     <button onclick="closeCourseDetail()" class="click-scale absolute top-3 right-3 w-8 h-8 bg-black/30 rounded-full flex items-center justify-center text-white">
                         <i class="fas fa-times text-sm"></i>
@@ -1409,8 +1409,8 @@
             document.getElementById('courseDetailTitle2').textContent = teacherTitle;
             
             // 设置默认图片
-            document.getElementById('courseDetailImage').src = './png/21.png medical education course cover pharmacy medicine books classroom setting modern clean&width=640&height=360&orientation=landscape&flag=1780976443903ABCDEfghij12345KLMN&type=gen-ui-agent';
-            document.getElementById('courseDetailAvatar').src = './png/21.png chinese medical educator portrait formal attire confident expression hospital background&width=80&height=80&orientation=square&flag=1780976443903FGHIJklmno67890OPQR&type=gen-ui-agent';
+            document.getElementById('courseDetailImage').src = './png/23.png';
+            document.getElementById('courseDetailAvatar').src = './png/21.png';
             
             document.getElementById('courseDetailModal').style.display = 'flex';
         }
