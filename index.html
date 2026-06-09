@@ -1,0 +1,1471 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>医药代表学历提升平台</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#0d9488',
+                        'primary-light': '#14b8a6',
+                        'primary-dark': '#134e4a',
+                        secondary: '#334155',
+                        accent: '#f59e0b',
+                        'accent-hover': '#d97706',
+                        'gray-light': '#f0fdfa',
+                        'gray-mid': '#64748b',
+                        'gray-dark': '#1e293b',
+                        success: '#10b981',
+                        warning: '#ef4444',
+                    },
+                    fontFamily: {
+                        sans: ['Noto Sans SC', 'system-ui', 'sans-serif'],
+                    },
+                    animation: {
+                        'pulse-dot': 'pulse-dot 1.5s ease-in-out infinite',
+                        'float': 'float 3s ease-in-out infinite',
+                        'slide-up': 'slide-up 0.4s ease-out',
+                        'fade-in': 'fade-in 0.3s ease-out',
+                        'scale-in': 'scale-in 0.3s ease-out',
+                    },
+                    keyframes: {
+                        'pulse-dot': {
+                            '0%, 100%': { opacity: '1', transform: 'scale(1)' },
+                            '50%': { opacity: '0.5', transform: 'scale(1.3)' },
+                        },
+                        'float': {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-8px)' },
+                        },
+                        'slide-up': {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        'fade-in': {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        },
+                        'scale-in': {
+                            '0%': { opacity: '0', transform: 'scale(0.95)' },
+                            '100%': { opacity: '1', transform: 'scale(1)' },
+                        },
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Noto Sans SC', system-ui, sans-serif; background: #e5e7eb; }
+        .app-container { width: 375px; margin: 0 auto; min-height: 100vh; position: relative; background: #f0fdfa; overflow-x: hidden; }
+        .view-section { display: none; animation: fade-in 0.3s ease-out; }
+        .view-section.active { display: block; }
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+        .live-pulse { animation: pulse-dot 1.5s ease-in-out infinite; }
+        .card-hover { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .card-hover:active { transform: scale(0.98); }
+        .btn-primary { transition: all 0.2s ease; }
+        .btn-primary:active { transform: scale(0.96); }
+        .glass-effect { backdrop-filter: blur(12px); background: rgba(255,255,255,0.95); }
+        .video-overlay { background: linear-gradient(180deg, rgba(19,78,74,0.4) 0%, transparent 30%, transparent 70%, rgba(19,78,74,0.6) 100%); }
+        .chat-item { animation: slide-up 0.3s ease-out; }
+        .modal-backdrop { backdrop-filter: blur(4px); }
+        .progress-bar { transition: width 0.3s ease; }
+        .tag-pill { transition: all 0.2s ease; }
+        .tag-pill:active { transform: scale(0.95); }
+        .nav-item { position: relative; }
+        .banner-slide { transition: opacity 0.6s ease-in-out; }
+        .star-rating { color: #f59e0b; }
+        .comment-enter { animation: slide-up 0.4s ease-out; }
+        .floating-action { animation: float 3s ease-in-out infinite; }
+        .input-focus:focus { box-shadow: 0 0 0 3px rgba(13,148,136,0.15); border-color: #0d9488; }
+        .tab-active { color: #0d9488; }
+        .tab-active .tab-icon { background: #0d9488; color: white; }
+        .safe-area-bottom { padding-bottom: env(safe-area-inset-bottom, 20px); }
+
+        /* Poster styles */
+        .poster-card {
+            width: 320px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.12);
+            overflow: hidden;
+        }
+        .poster-gradient-blue {
+            background: linear-gradient(135deg, #1e88e5 0%, #0d47a1 100%);
+        }
+        .qr-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 2px;
+        }
+        .qr-grid span {
+            width: 8px;
+            height: 8px;
+            background: #1e293b;
+            border-radius: 1px;
+        }
+        .qr-grid span:nth-child(3n) { background: transparent; }
+        .qr-grid span:nth-child(5n+2) { background: transparent; }
+        .qr-grid span:nth-child(7n+1) { background: #1e293b; }
+
+        /* Desktop centering */
+        @media (min-width: 768px) {
+            body { display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 20px; }
+            .app-container { min-height: calc(100vh - 40px); max-height: calc(100vh - 40px); border-radius: 24px; box-shadow: 0 25px 80px rgba(0,0,0,0.15); overflow-y: auto; }
+        }
+
+        /* Toast animation */
+        @keyframes toast-in {
+            0% { opacity: 0; transform: translate(-50%, -20px); }
+            100% { opacity: 1; transform: translate(-50%, 0); }
+        }
+        @keyframes toast-out {
+            0% { opacity: 1; transform: translate(-50%, 0); }
+            100% { opacity: 0; transform: translate(-50%, -20px); }
+        }
+        .toast-enter { animation: toast-in 0.3s ease-out; }
+        .toast-exit { animation: toast-out 0.3s ease-in; }
+
+        /* Scale click effect */
+        .click-scale { transition: transform 0.15s ease; }
+        .click-scale:active { transform: scale(0.95); }
+
+        /* Modal animation */
+        .modal-enter { animation: scale-in 0.3s ease-out; }
+    </style>
+</head>
+<body class="text-gray-dark antialiased">
+
+    <div class="app-container" id="app">
+        <!-- 全局Toast提示 -->
+        <div id="globalToast" class="fixed top-20 left-1/2 transform -translate-x-1/2 z-[200] hidden">
+            <div class="bg-gray-dark/90 text-white px-5 py-2.5 rounded-full text-sm font-medium shadow-lg flex items-center gap-2">
+                <i id="toastIcon" class="fas fa-check-circle text-success"></i>
+                <span id="toastMessage">操作成功</span>
+            </div>
+        </div>
+
+        <!-- 小程序顶部导航栏 -->
+        <header class="sticky top-0 z-50 bg-primary">
+            <div class="h-11 flex items-center justify-between px-4">
+                <button onclick="handleBack()" class="click-scale w-8 h-8 flex items-center justify-center text-white/80 active:text-white">
+                    <i class="fas fa-chevron-left text-sm"></i>
+                </button>
+                <h1 class="text-white font-semibold text-base">医药学堂</h1>
+                <button onclick="showMoreOptions()" class="click-scale w-8 h-8 flex items-center justify-center text-white/80 active:text-white">
+                    <i class="fas fa-ellipsis-h text-sm"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- 首页视图 -->
+        <section id="view-home" class="view-section active">
+            <!-- 首页 Banner 区域 -->
+            <section>
+                <div class="relative h-52 overflow-hidden bg-gradient-to-br from-primary-dark via-primary to-primary-light">
+                    <div class="absolute inset-0 opacity-20">
+                        <div class="absolute top-8 left-8 w-32 h-32 bg-white/10 rounded-full blur-2xl"></div>
+                        <div class="absolute bottom-6 right-12 w-40 h-40 bg-accent/10 rounded-full blur-2xl"></div>
+                    </div>
+                    <div class="relative px-5 h-full flex flex-col justify-center">
+                        <div class="inline-flex items-center gap-1.5 bg-accent/20 text-accent px-3 py-1 rounded-full text-xs font-medium mb-3 w-fit">
+                            <span class="w-1.5 h-1.5 bg-accent rounded-full live-pulse"></span>
+                            热门直播进行中
+                        </div>
+                        <h2 class="text-white text-2xl font-bold leading-tight mb-2">
+                            医药代表<br>
+                            <span class="text-accent">学历提升计划</span>
+                        </h2>
+                        <p class="text-white/70 text-xs mb-4 leading-relaxed max-w-[280px]">
+                            助力医药从业者学历升级，职业发展更进一步
+                        </p>
+                        <button onclick="showConsultModal()" class="click-scale btn-primary bg-accent text-white px-6 py-2.5 rounded-[10px] font-semibold text-sm flex items-center gap-2 w-fit">
+                            <i class="fas fa-phone-alt text-xs"></i>
+                            立即咨询
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 快捷入口 -->
+            <section class="py-4 bg-white">
+                <div class="px-5 grid grid-cols-4 gap-3">
+                    <div onclick="switchToCategory('学历提升')" class="click-scale flex flex-col items-center gap-1.5 cursor-pointer">
+                        <div class="w-12 h-12 bg-primary/10 rounded-[14px] flex items-center justify-center">
+                            <i class="fas fa-graduation-cap text-primary text-lg"></i>
+                        </div>
+                        <span class="text-xs text-gray-dark">学历提升</span>
+                    </div>
+                    <div onclick="switchToCategory('执业药师')" class="click-scale flex flex-col items-center gap-1.5 cursor-pointer">
+                        <div class="w-12 h-12 bg-primary/10 rounded-[14px] flex items-center justify-center">
+                            <i class="fas fa-pills text-primary text-lg"></i>
+                        </div>
+                        <span class="text-xs text-gray-dark">执业药师</span>
+                    </div>
+                    <div onclick="switchToCategory('直播课堂')" class="click-scale flex flex-col items-center gap-1.5 cursor-pointer">
+                        <div class="w-12 h-12 bg-primary/10 rounded-[14px] flex items-center justify-center">
+                            <i class="fas fa-video text-primary text-lg"></i>
+                        </div>
+                        <span class="text-xs text-gray-dark">直播课堂</span>
+                    </div>
+                    <div onclick="switchToCategory('备考资料')" class="click-scale flex flex-col items-center gap-1.5 cursor-pointer">
+                        <div class="w-12 h-12 bg-primary/10 rounded-[14px] flex items-center justify-center">
+                            <i class="fas fa-file-alt text-primary text-lg"></i>
+                        </div>
+                        <span class="text-xs text-gray-dark">备考资料</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 直播预告卡片区域 -->
+            <section class="py-4 bg-gray-light">
+                <div class="px-5">
+                    <div class="flex items-center justify-between mb-3">
+                        <h3 class="text-base font-bold text-gray-dark">即将开始的直播</h3>
+                        <a href="#" onclick="showToast('查看全部直播', 'fa-list')" class="text-primary text-xs flex items-center gap-0.5 click-scale">
+                            全部 <i class="fas fa-chevron-right text-[10px]"></i>
+                        </a>
+                    </div>
+                    <div class="space-y-3">
+                        <!-- 直播卡片1 - 正在直播 -->
+                        <div class="card-hover bg-white rounded-[12px] overflow-hidden shadow-[0_2px_12px_rgba(0,0,0,0.06)]">
+                            <div class="relative h-36">
+                                <img src="https://mastergo.com/ai/api/search-image?query=pharmaceutical medical representative training session modern classroom drug bottles medicine boxes professional healthcare education setting teal lighting&width=640&height=360&orientation=landscape&flag=1780976443903ABCDEfghij12345KLMN&type=gen-ui-agent" class="w-full h-full object-cover object-top" alt="课程封面">
+                                <div class="absolute top-2.5 left-2.5 bg-warning text-white text-[10px] font-bold px-2.5 py-0.5 rounded-full flex items-center gap-1">
+                                    <span class="w-1 h-1 bg-white rounded-full live-pulse"></span>
+                                    正在直播
+                                </div>
+                                <div class="absolute bottom-2.5 right-2.5 bg-black/60 text-white text-[10px] px-2 py-0.5 rounded flex items-center gap-1">
+                                    <i class="fas fa-user text-[8px]"></i> 1,523人
+                                </div>
+                            </div>
+                            <div class="p-3.5">
+                                <h4 class="font-bold text-gray-dark text-sm mb-2 line-clamp-1">医药代表合规培训 - 最新政策解读</h4>
+                                <div class="flex items-center gap-2 mb-3">
+                                    <img src="https://mastergo.com/ai/api/search-image?query=professional chinese male pharmacist portrait white coat medical setting hospital pharmacy background confident expression&width=80&height=80&orientation=square&flag=1780976443903FGHIJklmno67890OPQR&type=gen-ui-agent" class="w-7 h-7 rounded-full object-cover object-top" alt="讲师">
+                                    <div>
+                                        <p class="text-xs font-medium text-gray-dark">陈志强主任</p>
+                                        <p class="text-[10px] text-gray-mid">执业药师 · 15年行业经验</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-[10px] text-gray-mid flex items-center gap-1"><i class="far fa-clock"></i> 今天 19:30</span>
+                                    <button onclick="enterLiveRoom()" class="click-scale bg-primary text-white text-xs font-medium px-4 py-1.5 rounded-[6px]">
+                                        进入直播间
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 直播卡片2 - 即将开始 -->
+                        <div class="card-hover bg-white rounded-[12px] overflow-hidden shadow-[0_2px_12px_rgba(0,0,0,0.06)]">
+                            <div class="relative h-36">
+                                <img src="https://mastergo.com/ai/api/search-image?query=pharmaceutical chemistry laboratory equipment beakers test tubes medicine research professional medical education setting modern clean&width=640&height=360&orientation=landscape&flag=1780976443903STUVWxyzab12345CDEF&type=gen-ui-agent" class="w-full h-full object-cover object-top" alt="课程封面">
+                                <div class="absolute top-2.5 left-2.5 bg-accent text-white text-[10px] font-bold px-2.5 py-0.5 rounded-full">
+                                    即将开始
+                                </div>
+                                <div class="absolute bottom-2.5 right-2.5 bg-black/60 text-white text-[10px] px-2 py-0.5 rounded flex items-center gap-1">
+                                    <i class="fas fa-user text-[8px]"></i> 892人已预约
+                                </div>
+                            </div>
+                            <div class="p-3.5">
+                                <h4 class="font-bold text-gray-dark text-sm mb-2 line-clamp-1">药学基础知识精讲 - 药物化学入门</h4>
+                                <div class="flex items-center gap-2 mb-3">
+                                    <img src="https://mastergo.com/ai/api/search-image?query=professional chinese female pharmacist portrait white coat glasses laboratory background medical professional confident&width=80&height=80&orientation=square&flag=1780976443903GHIJKlmnop12345STUV&type=gen-ui-agent" class="w-7 h-7 rounded-full object-cover object-top" alt="讲师">
+                                    <div>
+                                        <p class="text-xs font-medium text-gray-dark">林雅芳教授</p>
+                                        <p class="text-[10px] text-gray-mid">药学博士 · 高校任教12年</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-[10px] text-gray-mid flex items-center gap-1"><i class="far fa-clock"></i> 明天 14:00</span>
+                                    <button onclick="bookLive(this)" class="click-scale bg-white border border-primary text-primary text-xs font-medium px-4 py-1.5 rounded-[6px]">
+                                        预约直播
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 直播卡片3 - 已结束 -->
+                        <div class="card-hover bg-white rounded-[12px] overflow-hidden shadow-[0_2px_12px_rgba(0,0,0,0.06)]">
+                            <div class="relative h-36">
+                                <img src="https://mastergo.com/ai/api/search-image?query=pharmaceutical sales marketing training modern conference room presentation screen medicine products professional healthcare business setting&width=640&height=360&orientation=landscape&flag=1780976443903WXYZAbcdef12345GHIJ&type=gen-ui-agent" class="w-full h-full object-cover object-top grayscale-[30%]" alt="课程封面">
+                                <div class="absolute top-2.5 left-2.5 bg-gray-mid text-white text-[10px] font-bold px-2.5 py-0.5 rounded-full">
+                                    已结束
+                                </div>
+                                <div class="absolute inset-0 bg-black/20 flex items-center justify-center">
+                                    <div class="w-10 h-10 bg-white/90 rounded-full flex items-center justify-center click-scale cursor-pointer" onclick="playReplay()">
+                                        <i class="fas fa-play text-primary text-sm ml-0.5"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="p-3.5">
+                                <h4 class="font-bold text-gray-dark text-sm mb-2 line-clamp-1">医药营销实务 - 客户沟通技巧</h4>
+                                <div class="flex items-center gap-2 mb-3">
+                                    <img src="https://mastergo.com/ai/api/search-image?query=professional chinese male medical sales manager portrait business suit pharmaceutical company office background confident&width=80&height=80&orientation=square&flag=1780976443903KLMNOpqrst12345UVWX&type=gen-ui-agent" class="w-7 h-7 rounded-full object-cover object-top" alt="讲师">
+                                    <div>
+                                        <p class="text-xs font-medium text-gray-dark">王建国总监</p>
+                                        <p class="text-[10px] text-gray-mid">医药营销专家 · 10年实战经验</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-[10px] text-gray-mid flex items-center gap-1"><i class="far fa-clock"></i> 昨天 19:30</span>
+                                    <button onclick="playReplay()" class="click-scale bg-white border border-gray-300 text-gray-mid text-xs font-medium px-4 py-1.5 rounded-[6px]">
+                                        观看回放
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 课程分类导航 -->
+            <section class="py-3 bg-white sticky top-11 z-40">
+                <div class="px-5">
+                    <div class="flex items-center gap-2 overflow-x-auto scrollbar-hide pb-1" id="homeCategoryTags">
+                        <button onclick="switchCategory(this, '全部')" class="tag-pill bg-primary text-white px-4 py-2 rounded-full text-xs font-medium whitespace-nowrap click-scale">全部</button>
+                        <button onclick="switchCategory(this, '学历提升')" class="tag-pill bg-gray-light text-gray-mid px-4 py-2 rounded-full text-xs font-medium whitespace-nowrap click-scale">学历提升</button>
+                        <button onclick="switchCategory(this, '执业药师')" class="tag-pill bg-gray-light text-gray-mid px-4 py-2 rounded-full text-xs font-medium whitespace-nowrap click-scale">执业药师</button>
+                        <button onclick="switchCategory(this, '医药营销')" class="tag-pill bg-gray-light text-gray-mid px-4 py-2 rounded-full text-xs font-medium whitespace-nowrap click-scale">医药营销</button>
+                        <button onclick="switchCategory(this, 'GSP认证')" class="tag-pill bg-gray-light text-gray-mid px-4 py-2 rounded-full text-xs font-medium whitespace-nowrap click-scale">GSP认证</button>
+                        <button onclick="switchCategory(this, '健康管理')" class="tag-pill bg-gray-light text-gray-mid px-4 py-2 rounded-full text-xs font-medium whitespace-nowrap click-scale">健康管理</button>
+                        <button onclick="switchCategory(this, '继续教育')" class="tag-pill bg-gray-light text-gray-mid px-4 py-2 rounded-full text-xs font-medium whitespace-nowrap click-scale">继续教育</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 课程列表区域 -->
+            <section class="py-4 bg-gray-light pb-24">
+                <div class="px-5 space-y-3">
+                    <!-- 课程卡片1 -->
+                    <div onclick="showCourseDetail('医药代表学历提升班 - 大专/本科直通车', '周明华', '医学教授')" class="card-hover bg-white rounded-[12px] overflow-hidden shadow-[0_2px_12px_rgba(0,0,0,0.06)] flex cursor-pointer click-scale">
+                        <div class="relative w-32 h-28 shrink-0">
+                            <img src="https://mastergo.com/ai/api/search-image?query=pharmaceutical study materials medicine books pharmacy textbooks stethoscope desk organized professional medical education setting&width=320&height=280&orientation=landscape&flag=1780976443903YZABCdefgh12345IJKL&type=gen-ui-agent" class="w-full h-full object-cover object-top" alt="课程封面">
+                            <span class="absolute top-2 left-2 bg-success text-white text-[10px] font-bold px-2 py-0.5 rounded">免费</span>
+                        </div>
+                        <div class="p-3 flex-1 flex flex-col justify-between">
+                            <h4 class="font-bold text-gray-dark text-sm line-clamp-2">医药代表学历提升班 - 大专/本科直通车</h4>
+                            <div class="flex items-center gap-2">
+                                <img src="https://mastergo.com/ai/api/search-image?query=professional chinese male medical educator portrait middle age glasses formal attire hospital background&width=60&height=60&orientation=square&flag=1780976443903MNOPQrstuv12345WXYZ&type=gen-ui-agent" class="w-5 h-5 rounded-full object-cover object-top" alt="讲师">
+                                <span class="text-[10px] text-gray-mid">周明华 · 医学教授</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-1">
+                                    <i class="fas fa-star text-accent text-[10px]"></i>
+                                    <span class="text-[10px] font-medium text-gray-dark">4.9</span>
+                                    <span class="text-[10px] text-gray-mid">(1,856)</span>
+                                </div>
+                                <span class="text-[10px] text-gray-mid">6,320人已学</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 课程卡片2 -->
+                    <div onclick="showCourseDetail('执业药师考试VIP精品班 - 西药全科', '李雪梅', '主任药师')" class="card-hover bg-white rounded-[12px] overflow-hidden shadow-[0_2px_12px_rgba(0,0,0,0.06)] flex cursor-pointer click-scale">
+                        <div class="relative w-32 h-28 shrink-0">
+                            <img src="https://mastergo.com/ai/api/search-image?query=licensed pharmacist examination preparation materials drug reference books pharmacy counter medicine bottles professional medical study setting&width=320&height=280&orientation=landscape&flag=1780976443903ABCDEfghij12345KLMN&type=gen-ui-agent" class="w-full h-full object-cover object-top" alt="课程封面">
+                            <span class="absolute top-2 left-2 bg-primary text-white text-[10px] font-bold px-2 py-0.5 rounded">¥1,680</span>
+                        </div>
+                        <div class="p-3 flex-1 flex flex-col justify-between">
+                            <h4 class="font-bold text-gray-dark text-sm line-clamp-2">执业药师考试VIP精品班 - 西药全科</h4>
+                            <div class="flex items-center gap-2">
+                                <img src="https://mastergo.com/ai/api/search-image?query=professional chinese female pharmacist portrait white coat warm smile pharmacy background experienced&width=60&height=60&orientation=square&flag=1780976443903FGHIJklmno67890OPQR&type=gen-ui-agent" class="w-5 h-5 rounded-full object-cover object-top" alt="讲师">
+                                <span class="text-[10px] text-gray-mid">李雪梅 · 主任药师</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-1">
+                                    <i class="fas fa-star text-accent text-[10px]"></i>
+                                    <span class="text-[10px] font-medium text-gray-dark">4.8</span>
+                                    <span class="text-[10px] text-gray-mid">(1,234)</span>
+                                </div>
+                                <span class="text-[10px] text-gray-mid">4,560人已学</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 课程卡片3 -->
+                    <div onclick="showCourseDetail('药品经营质量管理规范GSP认证培训', '赵国强', 'GSP认证专家')" class="card-hover bg-white rounded-[12px] overflow-hidden shadow-[0_2px_12px_rgba(0,0,0,0.06)] flex cursor-pointer click-scale">
+                        <div class="relative w-32 h-28 shrink-0">
+                            <img src="https://mastergo.com/ai/api/search-image?query=GSP good supply practice pharmaceutical warehouse quality management medicine storage temperature control professional healthcare logistics&width=320&height=280&orientation=landscape&flag=1780976443903STUVWxyzab12345CDEF&type=gen-ui-agent" class="w-full h-full object-cover object-top" alt="课程封面">
+                            <span class="absolute top-2 left-2 bg-success text-white text-[10px] font-bold px-2 py-0.5 rounded">免费试听</span>
+                        </div>
+                        <div class="p-3 flex-1 flex flex-col justify-between">
+                            <h4 class="font-bold text-gray-dark text-sm line-clamp-2">药品经营质量管理规范GSP认证培训</h4>
+                            <div class="flex items-center gap-2">
+                                <img src="https://mastergo.com/ai/api/search-image?query=professional chinese male quality control manager portrait pharmaceutical factory clean room background serious expression&width=60&height=60&orientation=square&flag=1780976443903GHIJKlmnop12345STUV&type=gen-ui-agent" class="w-5 h-5 rounded-full object-cover object-top" alt="讲师">
+                                <span class="text-[10px] text-gray-mid">赵国强 · GSP认证专家</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-1">
+                                    <i class="fas fa-star text-accent text-[10px]"></i>
+                                    <span class="text-[10px] font-medium text-gray-dark">4.9</span>
+                                    <span class="text-[10px] text-gray-mid">(2,567)</span>
+                                </div>
+                                <span class="text-[10px] text-gray-mid">8,910人已学</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 课程卡片4 -->
+                    <div onclick="showCourseDetail('健康管理师认证班 - 医药从业者优先', '孙丽华', '健康管理师')" class="card-hover bg-white rounded-[12px] overflow-hidden shadow-[0_2px_12px_rgba(0,0,0,0.06)] flex cursor-pointer click-scale">
+                        <div class="relative w-32 h-28 shrink-0">
+                            <img src="https://mastergo.com/ai/api/search-image?query=health management nutrition consultation medical checkup health screening professional healthcare wellness center modern clean environment&width=320&height=280&orientation=landscape&flag=1780976443903WXYZAbcdef12345GHIJ&type=gen-ui-agent" class="w-full h-full object-cover object-top" alt="课程封面">
+                            <span class="absolute top-2 left-2 bg-primary text-white text-[10px] font-bold px-2 py-0.5 rounded">¥2,280</span>
+                        </div>
+                        <div class="p-3 flex-1 flex flex-col justify-between">
+                            <h4 class="font-bold text-gray-dark text-sm line-clamp-2">健康管理师认证班 - 医药从业者优先</h4>
+                            <div class="flex items-center gap-2">
+                                <img src="https://mastergo.com/ai/api/search-image?query=professional chinese female health manager portrait white coat stethoscope wellness center background friendly&width=60&height=60&orientation=square&flag=1780976443903KLMNOpqrst12345UVWX&type=gen-ui-agent" class="w-5 h-5 rounded-full object-cover object-top" alt="讲师">
+                                <span class="text-[10px] text-gray-mid">孙丽华 · 健康管理师</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-1">
+                                    <i class="fas fa-star text-accent text-[10px]"></i>
+                                    <span class="text-[10px] font-medium text-gray-dark">4.7</span>
+                                    <span class="text-[10px] text-gray-mid">(876)</span>
+                                </div>
+                                <span class="text-[10px] text-gray-mid">3,450人已学</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </section>
+
+        <!-- 课程视图 -->
+        <section id="view-courses" class="view-section">
+            <section class="py-3 bg-white sticky top-11 z-40">
+                <div class="px-5">
+                    <div class="flex items-center gap-2 overflow-x-auto scrollbar-hide pb-1" id="courseCategoryTags">
+                        <button onclick="switchCategory(this, '全部')" class="tag-pill bg-primary text-white px-4 py-2 rounded-full text-xs font-medium whitespace-nowrap click-scale">全部</button>
+                        <button onclick="switchCategory(this, '学历提升')" class="tag-pill bg-gray-light text-gray-mid px-4 py-2 rounded-full text-xs font-medium whitespace-nowrap click-scale">学历提升</button>
+                        <button onclick="switchCategory(this, '执业药师')" class="tag-pill bg-gray-light text-gray-mid px-4 py-2 rounded-full text-xs font-medium whitespace-nowrap click-scale">执业药师</button>
+                        <button onclick="switchCategory(this, '医药营销')" class="tag-pill bg-gray-light text-gray-mid px-4 py-2 rounded-full text-xs font-medium whitespace-nowrap click-scale">医药营销</button>
+                        <button onclick="switchCategory(this, 'GSP认证')" class="tag-pill bg-gray-light text-gray-mid px-4 py-2 rounded-full text-xs font-medium whitespace-nowrap click-scale">GSP认证</button>
+                        <button onclick="switchCategory(this, '健康管理')" class="tag-pill bg-gray-light text-gray-mid px-4 py-2 rounded-full text-xs font-medium whitespace-nowrap click-scale">健康管理</button>
+                        <button onclick="switchCategory(this, '继续教育')" class="tag-pill bg-gray-light text-gray-mid px-4 py-2 rounded-full text-xs font-medium whitespace-nowrap click-scale">继续教育</button>
+                    </div>
+                </div>
+            </section>
+
+            <section class="py-4 bg-gray-light pb-24">
+                <div class="px-5 space-y-3">
+                    <!-- 课程卡片1 -->
+                    <div onclick="showCourseDetail('医药代表学历提升班 - 大专/本科直通车', '周明华', '医学教授')" class="card-hover bg-white rounded-[12px] overflow-hidden shadow-[0_2px_12px_rgba(0,0,0,0.06)] flex cursor-pointer click-scale">
+                        <div class="relative w-32 h-28 shrink-0">
+                            <img src="https://mastergo.com/ai/api/search-image?query=pharmaceutical study materials medicine books pharmacy textbooks stethoscope desk organized professional medical education setting&width=320&height=280&orientation=landscape&flag=1780976443903YZABCdefgh12345IJKL&type=gen-ui-agent" class="w-full h-full object-cover object-top" alt="课程封面">
+                            <span class="absolute top-2 left-2 bg-success text-white text-[10px] font-bold px-2 py-0.5 rounded">免费</span>
+                        </div>
+                        <div class="p-3 flex-1 flex flex-col justify-between">
+                            <h4 class="font-bold text-gray-dark text-sm line-clamp-2">医药代表学历提升班 - 大专/本科直通车</h4>
+                            <div class="flex items-center gap-2">
+                                <img src="https://mastergo.com/ai/api/search-image?query=professional chinese male medical educator portrait middle age glasses formal attire hospital background&width=60&height=60&orientation=square&flag=1780976443903MNOPQrstuv12345WXYZ&type=gen-ui-agent" class="w-5 h-5 rounded-full object-cover object-top" alt="讲师">
+                                <span class="text-[10px] text-gray-mid">周明华 · 医学教授</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-1">
+                                    <i class="fas fa-star text-accent text-[10px]"></i>
+                                    <span class="text-[10px] font-medium text-gray-dark">4.9</span>
+                                    <span class="text-[10px] text-gray-mid">(1,856)</span>
+                                </div>
+                                <span class="text-[10px] text-gray-mid">6,320人已学</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 课程卡片2 -->
+                    <div onclick="showCourseDetail('执业药师考试VIP精品班 - 西药全科', '李雪梅', '主任药师')" class="card-hover bg-white rounded-[12px] overflow-hidden shadow-[0_2px_12px_rgba(0,0,0,0.06)] flex cursor-pointer click-scale">
+                        <div class="relative w-32 h-28 shrink-0">
+                            <img src="https://mastergo.com/ai/api/search-image?query=licensed pharmacist examination preparation materials drug reference books pharmacy counter medicine bottles professional medical study setting&width=320&height=280&orientation=landscape&flag=1780976443903ABCDEfghij12345KLMN&type=gen-ui-agent" class="w-full h-full object-cover object-top" alt="课程封面">
+                            <span class="absolute top-2 left-2 bg-primary text-white text-[10px] font-bold px-2 py-0.5 rounded">¥1,680</span>
+                        </div>
+                        <div class="p-3 flex-1 flex flex-col justify-between">
+                            <h4 class="font-bold text-gray-dark text-sm line-clamp-2">执业药师考试VIP精品班 - 西药全科</h4>
+                            <div class="flex items-center gap-2">
+                                <img src="https://mastergo.com/ai/api/search-image?query=professional chinese female pharmacist portrait white coat warm smile pharmacy background experienced&width=60&height=60&orientation=square&flag=1780976443903FGHIJklmno67890OPQR&type=gen-ui-agent" class="w-5 h-5 rounded-full object-cover object-top" alt="讲师">
+                                <span class="text-[10px] text-gray-mid">李雪梅 · 主任药师</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-1">
+                                    <i class="fas fa-star text-accent text-[10px]"></i>
+                                    <span class="text-[10px] font-medium text-gray-dark">4.8</span>
+                                    <span class="text-[10px] text-gray-mid">(1,234)</span>
+                                </div>
+                                <span class="text-[10px] text-gray-mid">4,560人已学</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 课程卡片3 -->
+                    <div onclick="showCourseDetail('药品经营质量管理规范GSP认证培训', '赵国强', 'GSP认证专家')" class="card-hover bg-white rounded-[12px] overflow-hidden shadow-[0_2px_12px_rgba(0,0,0,0.06)] flex cursor-pointer click-scale">
+                        <div class="relative w-32 h-28 shrink-0">
+                            <img src="https://mastergo.com/ai/api/search-image?query=GSP good supply practice pharmaceutical warehouse quality management medicine storage temperature control professional healthcare logistics&width=320&height=280&orientation=landscape&flag=1780976443903STUVWxyzab12345CDEF&type=gen-ui-agent" class="w-full h-full object-cover object-top" alt="课程封面">
+                            <span class="absolute top-2 left-2 bg-success text-white text-[10px] font-bold px-2 py-0.5 rounded">免费试听</span>
+                        </div>
+                        <div class="p-3 flex-1 flex flex-col justify-between">
+                            <h4 class="font-bold text-gray-dark text-sm line-clamp-2">药品经营质量管理规范GSP认证培训</h4>
+                            <div class="flex items-center gap-2">
+                                <img src="https://mastergo.com/ai/api/search-image?query=professional chinese male quality control manager portrait pharmaceutical factory clean room background serious expression&width=60&height=60&orientation=square&flag=1780976443903GHIJKlmnop12345STUV&type=gen-ui-agent" class="w-5 h-5 rounded-full object-cover object-top" alt="讲师">
+                                <span class="text-[10px] text-gray-mid">赵国强 · GSP认证专家</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-1">
+                                    <i class="fas fa-star text-accent text-[10px]"></i>
+                                    <span class="text-[10px] font-medium text-gray-dark">4.9</span>
+                                    <span class="text-[10px] text-gray-mid">(2,567)</span>
+                                </div>
+                                <span class="text-[10px] text-gray-mid">8,910人已学</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 课程卡片4 -->
+                    <div onclick="showCourseDetail('健康管理师认证班 - 医药从业者优先', '孙丽华', '健康管理师')" class="card-hover bg-white rounded-[12px] overflow-hidden shadow-[0_2px_12px_rgba(0,0,0,0.06)] flex cursor-pointer click-scale">
+                        <div class="relative w-32 h-28 shrink-0">
+                            <img src="https://mastergo.com/ai/api/search-image?query=health management nutrition consultation medical checkup health screening professional healthcare wellness center modern clean environment&width=320&height=280&orientation=landscape&flag=1780976443903WXYZAbcdef12345GHIJ&type=gen-ui-agent" class="w-full h-full object-cover object-top" alt="课程封面">
+                            <span class="absolute top-2 left-2 bg-primary text-white text-[10px] font-bold px-2 py-0.5 rounded">¥2,280</span>
+                        </div>
+                        <div class="p-3 flex-1 flex flex-col justify-between">
+                            <h4 class="font-bold text-gray-dark text-sm line-clamp-2">健康管理师认证班 - 医药从业者优先</h4>
+                            <div class="flex items-center gap-2">
+                                <img src="https://mastergo.com/ai/api/search-image?query=professional chinese female health manager portrait white coat stethoscope wellness center background friendly&width=60&height=60&orientation=square&flag=1780976443903KLMNOpqrst12345UVWX&type=gen-ui-agent" class="w-5 h-5 rounded-full object-cover object-top" alt="讲师">
+                                <span class="text-[10px] text-gray-mid">孙丽华 · 健康管理师</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-1">
+                                    <i class="fas fa-star text-accent text-[10px]"></i>
+                                    <span class="text-[10px] font-medium text-gray-dark">4.7</span>
+                                    <span class="text-[10px] text-gray-mid">(876)</span>
+                                </div>
+                                <span class="text-[10px] text-gray-mid">3,450人已学</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </section>
+
+        <!-- 直播视图 -->
+        <section id="view-live" class="view-section">
+            <div class="bg-primary-dark rounded-[12px] overflow-hidden shadow-[0_8px_30px_rgba(0,0,0,0.15)] mx-5 mt-4">
+                <div class="flex items-center justify-between px-3 py-2.5 border-b border-white/10">
+                    <div class="flex items-center gap-2 overflow-hidden">
+                        <h4 class="text-white font-bold text-xs truncate">医药代表合规培训 - 最新政策解读</h4>
+                        <span class="bg-warning/20 text-warning text-[10px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1 shrink-0">
+                            <span class="w-1 h-1 bg-warning rounded-full live-pulse"></span>
+                            直播中
+                        </span>
+                    </div>
+                    <span class="text-white/50 text-[10px] flex items-center gap-1 shrink-0">
+                        <i class="fas fa-user-group text-[8px]"></i> 1,523人
+                    </span>
+                </div>
+                <div class="h-48 relative bg-black">
+                    <img src="https://mastergo.com/ai/api/search-image?query=pharmaceutical compliance training live streaming lecture screen recording instructor presenting medical regulations whiteboard healthcare policy modern classroom&width=640&height=360&orientation=landscape&flag=1780976443903YZABCdefgh12345IJKL&type=gen-ui-agent" class="w-full h-full object-cover object-top" alt="直播画面">
+                    <div class="video-overlay absolute inset-0 pointer-events-none"></div>
+                    <div class="absolute top-2 left-2 bg-black/40 text-white/60 text-[10px] px-2 py-1 rounded backdrop-blur-sm">
+                        医药学堂 · 专业直播
+                    </div>
+                    <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent px-3 py-2">
+                        <div class="flex items-center gap-2">
+                            <button class="text-white click-scale"><i class="fas fa-play text-xs"></i></button>
+                            <div class="flex-1 h-0.5 bg-white/20 rounded-full overflow-hidden">
+                                <div class="h-full bg-accent rounded-full progress-bar" style="width: 35%"></div>
+                            </div>
+                            <span class="text-white/70 text-[10px]">35:20</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white">
+                    <div class="p-3 border-b border-gray-100">
+                        <div class="flex items-center gap-2 mb-2">
+                            <img src="https://mastergo.com/ai/api/search-image?query=professional chinese male pharmacist portrait white coat medical setting hospital pharmacy background confident expression distinguished&width=80&height=80&orientation=square&flag=1780976443903MNOPQrstuv12345WXYZ&type=gen-ui-agent" class="w-9 h-9 rounded-full object-cover object-top" alt="讲师">
+                            <div>
+                                <p class="font-bold text-gray-dark text-xs">陈志强主任</p>
+                                <p class="text-[10px] text-gray-mid">执业药师 · 医药合规专家</p>
+                            </div>
+                        </div>
+                        <p class="text-[10px] text-gray-mid leading-relaxed">15年医药行业从业经验，专注医药代表合规培训与政策解读，曾任职多家知名药企合规总监。</p>
+                    </div>
+                    <div class="h-32 overflow-y-auto p-3 space-y-2" id="chatArea">
+                        <div class="chat-item flex gap-1.5">
+                            <span class="text-[10px] font-medium text-primary shrink-0">学员小李:</span>
+                            <span class="text-[10px] text-gray-dark">老师，新版合规政策对医药代表拜访有什么新要求？</span>
+                        </div>
+                        <div class="chat-item flex gap-1.5">
+                            <span class="text-[10px] font-medium text-primary shrink-0">学员小王:</span>
+                            <span class="text-[10px] text-gray-dark">讲得真清楚，终于理解了备案制的要求！</span>
+                        </div>
+                        <div class="chat-item flex gap-1.5">
+                            <span class="text-[10px] font-medium text-accent shrink-0">讲师回复:</span>
+                            <span class="text-[10px] text-gray-dark">@学员小李 新版要求所有拜访必须提前备案，我们接下来详细讲解备案流程。</span>
+                        </div>
+                        <div class="chat-item flex gap-1.5">
+                            <span class="text-[10px] font-medium text-primary shrink-0">学员小张:</span>
+                            <span class="text-[10px] text-gray-dark">这个案例和我们公司情况很像</span>
+                        </div>
+                        <div class="chat-item flex gap-1.5">
+                            <span class="text-[10px] font-medium text-primary shrink-0">学员小美:</span>
+                            <span class="text-[10px] text-gray-dark">已报名学历提升班，期待系统学习</span>
+                        </div>
+                        <div class="chat-item flex gap-1.5">
+                            <span class="text-[10px] font-medium text-primary shrink-0">学员大军:</span>
+                            <span class="text-[10px] text-gray-dark">老师课件可以下载吗？</span>
+                        </div>
+                        <div class="chat-item flex gap-1.5">
+                            <span class="text-[10px] font-medium text-accent shrink-0">系统公告:</span>
+                            <span class="text-[10px] text-warning">直播福利：填写问卷即可领取《医药代表合规手册》</span>
+                        </div>
+                    </div>
+                    <div class="p-3 border-t border-gray-100">
+                        <div class="flex gap-2">
+                            <input type="text" id="chatInput" placeholder="输入评论参与互动..." class="flex-1 bg-gray-light text-xs px-3 py-2 rounded-[6px] border border-gray-200 focus:outline-none input-focus text-gray-dark placeholder-gray-mid">
+                            <button onclick="sendChat()" class="click-scale bg-primary text-white px-4 py-2 rounded-[6px]">
+                                <i class="fas fa-paper-plane text-xs"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="p-3 border-t border-gray-100 bg-gray-light/50">
+                        <p class="text-[10px] font-medium text-gray-dark mb-1.5 flex items-center gap-1">
+                            <i class="fas fa-file-alt text-primary text-[10px]"></i> 课程资料
+                        </p>
+                        <div class="flex items-center justify-between bg-white p-2 rounded-[6px] border border-gray-100">
+                            <div class="flex items-center gap-1.5">
+                                <i class="fas fa-file-pdf text-warning text-xs"></i>
+                                <span class="text-[10px] text-gray-dark">合规培训讲义.pdf</span>
+                            </div>
+                            <button onclick="downloadFile()" class="click-scale text-primary text-[10px] font-medium">下载</button>
+                        </div>
+                        <button onclick="document.getElementById('surveyModal').style.display='flex'" class="click-scale btn-primary w-full mt-2 bg-accent text-white px-4 py-2.5 rounded-[8px] font-medium text-xs flex items-center justify-center gap-1.5">
+                            <i class="fas fa-gift text-[10px]"></i>
+                            填写问卷领取资料
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 问卷弹窗 -->
+            <div id="surveyModal" class="modal-backdrop fixed inset-0 bg-black/50 z-[100] flex items-end justify-center sm:items-center" style="width: 375px; left: 50%; transform: translateX(-50%); display: none;" onclick="if(event.target===this)this.style.display='none'">
+                <div class="bg-white rounded-t-[16px] sm:rounded-[16px] shadow-[0_25px_80px_rgba(0,0,0,0.25)] w-full max-h-[85vh] overflow-hidden animate-slide-up sm:w-[340px]">
+                    <div class="bg-primary px-5 py-4 flex items-center justify-between">
+                        <div>
+                            <h4 class="text-white font-bold text-base">医药代表学习需求调研</h4>
+                            <p class="text-white/60 text-[10px] mt-0.5">您的反馈将帮助我们提供更精准的课程服务</p>
+                        </div>
+                        <button onclick="document.getElementById('surveyModal').style.display='none'" class="click-scale text-white/60 hover:text-white transition-colors w-7 h-7 flex items-center justify-center rounded-full hover:bg-white/10">
+                            <i class="fas fa-times text-sm"></i>
+                        </button>
+                    </div>
+                    <div class="p-5 space-y-4 overflow-y-auto max-h-[55vh]">
+                        <div>
+                            <label class="block text-xs font-medium text-gray-dark mb-2">
+                                1. 您目前的最高学历？ <span class="text-warning">*</span>
+                            </label>
+                            <div class="space-y-1.5">
+                                <label class="flex items-center gap-2.5 p-2.5 rounded-[8px] border border-gray-200 active:border-primary active:bg-primary/5 cursor-pointer transition-all">
+                                    <input type="radio" name="education" class="w-3.5 h-3.5 text-primary accent-primary" checked>
+                                    <span class="text-xs text-gray-dark">高中/中专及以下</span>
+                                </label>
+                                <label class="flex items-center gap-2.5 p-2.5 rounded-[8px] border border-gray-200 active:border-primary active:bg-primary/5 cursor-pointer transition-all">
+                                    <input type="radio" name="education" class="w-3.5 h-3.5 text-primary accent-primary">
+                                    <span class="text-xs text-gray-dark">大专</span>
+                                </label>
+                                <label class="flex items-center gap-2.5 p-2.5 rounded-[8px] border border-gray-200 active:border-primary active:bg-primary/5 cursor-pointer transition-all">
+                                    <input type="radio" name="education" class="w-3.5 h-3.5 text-primary accent-primary">
+                                    <span class="text-xs text-gray-dark">本科</span>
+                                </label>
+                                <label class="flex items-center gap-2.5 p-2.5 rounded-[8px] border border-gray-200 active:border-primary active:bg-primary/5 cursor-pointer transition-all">
+                                    <input type="radio" name="education" class="w-3.5 h-3.5 text-primary accent-primary">
+                                    <span class="text-xs text-gray-dark">本科以上</span>
+                                </label>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-gray-dark mb-2">
+                                2. 您希望提升的方向？（可多选）
+                            </label>
+                            <div class="grid grid-cols-2 gap-1.5">
+                                <label class="flex items-center gap-2 p-2.5 rounded-[8px] border border-gray-200 active:border-primary active:bg-primary/5 cursor-pointer transition-all">
+                                    <input type="checkbox" class="w-3.5 h-3.5 text-primary accent-primary rounded" checked>
+                                    <span class="text-xs text-gray-dark">学历提升</span>
+                                </label>
+                                <label class="flex items-center gap-2 p-2.5 rounded-[8px] border border-gray-200 active:border-primary active:bg-primary/5 cursor-pointer transition-all">
+                                    <input type="checkbox" class="w-3.5 h-3.5 text-primary accent-primary rounded">
+                                    <span class="text-xs text-gray-dark">执业药师</span>
+                                </label>
+                                <label class="flex items-center gap-2 p-2.5 rounded-[8px] border border-gray-200 active:border-primary active:bg-primary/5 cursor-pointer transition-all">
+                                    <input type="checkbox" class="w-3.5 h-3.5 text-primary accent-primary rounded" checked>
+                                    <span class="text-xs text-gray-dark">医药营销</span>
+                                </label>
+                                <label class="flex items-center gap-2 p-2.5 rounded-[8px] border border-gray-200 active:border-primary active:bg-primary/5 cursor-pointer transition-all">
+                                    <input type="checkbox" class="w-3.5 h-3.5 text-primary accent-primary rounded">
+                                    <span class="text-xs text-gray-dark">GSP认证</span>
+                                </label>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-gray-dark mb-2">
+                                3. 您意向的目标院校？ <span class="text-warning">*</span>
+                            </label>
+                            <div class="space-y-1.5">
+                                <label class="flex items-center gap-2.5 p-2.5 rounded-[8px] border border-gray-200 active:border-primary active:bg-primary/5 cursor-pointer transition-all">
+                                    <input type="radio" name="school" class="w-3.5 h-3.5 text-primary accent-primary" checked>
+                                    <span class="text-xs text-gray-dark">中国药科大学</span>
+                                </label>
+                                <label class="flex items-center gap-2.5 p-2.5 rounded-[8px] border border-gray-200 active:border-primary active:bg-primary/5 cursor-pointer transition-all">
+                                    <input type="radio" name="school" class="w-3.5 h-3.5 text-primary accent-primary">
+                                    <span class="text-xs text-gray-dark">沈阳药科大学</span>
+                                </label>
+                                <label class="flex items-center gap-2.5 p-2.5 rounded-[8px] border border-gray-200 active:border-primary active:bg-primary/5 cursor-pointer transition-all">
+                                    <input type="radio" name="school" class="w-3.5 h-3.5 text-primary accent-primary">
+                                    <span class="text-xs text-gray-dark">地方医药类院校</span>
+                                </label>
+                                <label class="flex items-center gap-2.5 p-2.5 rounded-[8px] border border-gray-200 active:border-primary active:bg-primary/5 cursor-pointer transition-all">
+                                    <input type="radio" name="school" class="w-3.5 h-3.5 text-primary accent-primary">
+                                    <span class="text-xs text-gray-dark">暂无明确意向</span>
+                                </label>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-gray-dark mb-2">
+                                4. 请留下您的联系方式，我们将为您安排专属顾问 <span class="text-warning">*</span>
+                            </label>
+                            <div class="space-y-2">
+                                <input type="text" placeholder="请输入您的姓名" class="w-full px-3 py-2.5 rounded-[8px] border border-gray-200 focus:outline-none input-focus text-xs text-gray-dark placeholder-gray-mid" value="张学员">
+                                <input type="tel" placeholder="请输入您的手机号" class="w-full px-3 py-2.5 rounded-[8px] border border-gray-200 focus:outline-none input-focus text-xs text-gray-dark placeholder-gray-mid" value="138****8888">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-gray-dark mb-2">
+                                5. 您还有其他疑问或需求吗？
+                            </label>
+                            <textarea placeholder="请输入您的问题或需求..." rows="2" class="w-full px-3 py-2.5 rounded-[8px] border border-gray-200 focus:outline-none input-focus text-xs text-gray-dark placeholder-gray-mid resize-none"></textarea>
+                        </div>
+                    </div>
+                    <div class="px-5 py-4 border-t border-gray-100 flex items-center justify-between bg-gray-light/30">
+                        <button onclick="document.getElementById('surveyModal').style.display='none'" class="click-scale text-gray-mid text-xs font-medium px-3 py-2">
+                            稍后再说
+                        </button>
+                        <button onclick="submitSurvey()" class="click-scale btn-primary bg-primary text-white px-6 py-2.5 rounded-[8px] font-medium text-xs flex items-center gap-1.5">
+                            <i class="fas fa-check text-[10px]"></i>
+                            提交问卷
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="px-5 py-4 pb-24">
+                <h3 class="text-base font-bold text-gray-dark mb-3">更多直播推荐</h3>
+                <div class="space-y-3">
+                    <div class="card-hover bg-white rounded-[12px] overflow-hidden shadow-[0_2px_12px_rgba(0,0,0,0.06)]">
+                        <div class="relative h-36">
+                            <img src="https://mastergo.com/ai/api/search-image?query=pharmaceutical chemistry laboratory equipment beakers test tubes medicine research professional medical education setting modern clean&width=640&height=360&orientation=landscape&flag=1780976443903STUVWxyzab12345CDEF&type=gen-ui-agent" class="w-full h-full object-cover object-top" alt="课程封面">
+                            <div class="absolute top-2.5 left-2.5 bg-accent text-white text-[10px] font-bold px-2.5 py-0.5 rounded-full">
+                                即将开始
+                            </div>
+                        </div>
+                        <div class="p-3.5">
+                            <h4 class="font-bold text-gray-dark text-sm mb-2 line-clamp-1">药学基础知识精讲 - 药物化学入门</h4>
+                            <div class="flex items-center justify-between">
+                                <span class="text-[10px] text-gray-mid">明天 14:00</span>
+                                <button onclick="bookLive(this)" class="click-scale bg-white border border-primary text-primary text-xs font-medium px-4 py-1.5 rounded-[6px]">
+                                    预约直播
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 海报视图 -->
+        <section id="view-poster" class="view-section">
+            <div class="flex flex-col items-center gap-6 py-8 pb-24">
+                <!-- Poster Card -->
+                <div class="poster-card" id="sharePoster">
+                    <!-- Top: User Info -->
+                    <div class="px-5 py-4 flex items-center gap-3 border-b border-gray-100">
+                        <div class="w-[60px] h-[60px] rounded-full bg-gradient-to-br from-primary to-primary-dark flex items-center justify-center text-white text-xl font-bold">
+                            张
+                        </div>
+                        <div>
+                            <p class="text-sm font-bold text-gray-dark">张学员 邀请你一起观看</p>
+                            <p class="text-xs text-gray-mid mt-0.5">医药学堂 · 专业学历提升平台</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Middle: Poster Content -->
+                    <div class="poster-gradient-blue p-5 relative overflow-hidden">
+                        <!-- Decorative elements -->
+                        <div class="absolute -top-10 -right-10 w-32 h-32 bg-white/5 rounded-full blur-2xl"></div>
+                        <div class="absolute -bottom-10 -left-10 w-40 h-40 bg-white/5 rounded-full blur-2xl"></div>
+                        
+                        <div class="relative">
+                            <div class="text-center mb-4">
+                                <p class="text-white/60 text-[10px] mb-1">医药代表学历提升计划</p>
+                                <h3 class="text-white text-lg font-bold leading-tight">助力医药从业者<br>学历升级</h3>
+                            </div>
+                            
+                            <div class="bg-white/10 backdrop-blur-sm rounded-[12px] p-4 mb-4">
+                                <div class="flex items-center gap-3 mb-3">
+                                    <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
+                                        <i class="fas fa-graduation-cap text-white text-sm"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-white text-xs font-medium">大专/本科直通车</p>
+                                        <p class="text-white/50 text-[10px]">在职学习，国家认可学历</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
+                                        <i class="fas fa-certificate text-white text-sm"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-white text-xs font-medium">执业药师培训</p>
+                                        <p class="text-white/50 text-[10px]">名师授课，高通过率</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center justify-center gap-4">
+                                <div class="text-center">
+                                    <div class="w-16 h-16 bg-white rounded-[8px] p-1.5 mb-1.5">
+                                        <div class="qr-grid">
+                                            <span></span><span></span><span></span><span></span><span></span>
+                                            <span></span><span></span><span></span><span></span><span></span>
+                                            <span></span><span></span><span></span><span></span><span></span>
+                                            <span></span><span></span><span></span><span></span><span></span>
+                                            <span></span><span></span><span></span><span></span><span></span>
+                                        </div>
+                                    </div>
+                                    <p class="text-white/60 text-[8px]">扫码立即报名</p>
+                                </div>
+                                <div class="text-white/80 text-[10px] leading-relaxed">
+                                    <p>长按识别二维码</p>
+                                    <p>获取专属学习方案</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Bottom: Brand -->
+                    <div class="px-5 py-3 bg-gray-light flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <div class="w-6 h-6 bg-primary rounded-[6px] flex items-center justify-center">
+                                <i class="fas fa-capsules text-white text-[10px]"></i>
+                            </div>
+                            <span class="text-xs font-bold text-gray-dark">医药学堂</span>
+                        </div>
+                        <span class="text-[10px] text-gray-mid">www.yaoxuetang.com</span>
+                    </div>
+                </div>
+                
+                <!-- Action Buttons -->
+                <div class="flex gap-4 w-full px-8">
+                    <button onclick="savePoster()" class="click-scale flex-1 bg-primary text-white py-3 rounded-[10px] font-medium text-sm flex items-center justify-center gap-2">
+                        <i class="fas fa-download text-xs"></i>
+                        保存海报
+                    </button>
+                    <button onclick="showShareOptions()" class="click-scale flex-1 bg-white border-2 border-primary text-primary py-3 rounded-[10px] font-medium text-sm flex items-center justify-center gap-2">
+                        <i class="fas fa-share-alt text-xs"></i>
+                        分享给好友
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 个人中心视图 -->
+        <section id="view-profile" class="view-section">
+            <!-- User Info -->
+            <div class="bg-primary px-5 pt-6 pb-8">
+                <div class="flex items-center gap-4">
+                    <div class="w-16 h-16 rounded-full bg-white/20 flex items-center justify-center text-white text-2xl font-bold border-2 border-white/30">
+                        张
+                    </div>
+                    <div>
+                        <p class="text-white font-bold text-lg">张学员</p>
+                        <p class="text-white/60 text-xs">ID: 20240801001</p>
+                    </div>
+                </div>
+                <div class="flex gap-6 mt-6">
+                    <div class="text-center">
+                        <p class="text-white font-bold text-lg">3</p>
+                        <p class="text-white/50 text-[10px]">我的课程</p>
+                    </div>
+                    <div class="text-center">
+                        <p class="text-white font-bold text-lg">12</p>
+                        <p class="text-white/50 text-[10px]">直播预约</p>
+                    </div>
+                    <div class="text-center">
+                        <p class="text-white font-bold text-lg">2</p>
+                        <p class="text-white/50 text-[10px]">我的证书</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Menu List -->
+            <div class="px-4 -mt-4">
+                <div class="bg-white rounded-[12px] shadow-[0_2px_12px_rgba(0,0,0,0.06)] overflow-hidden">
+                    <div onclick="showDevToast()" class="click-scale flex items-center justify-between p-4 border-b border-gray-100 cursor-pointer active:bg-gray-50">
+                        <div class="flex items-center gap-3">
+                            <div class="w-9 h-9 bg-primary/10 rounded-[10px] flex items-center justify-center">
+                                <i class="fas fa-book text-primary text-sm"></i>
+                            </div>
+                            <span class="text-sm text-gray-dark">我的课程</span>
+                        </div>
+                        <i class="fas fa-chevron-right text-gray-mid text-xs"></i>
+                    </div>
+                    <div onclick="showDevToast()" class="click-scale flex items-center justify-between p-4 border-b border-gray-100 cursor-pointer active:bg-gray-50">
+                        <div class="flex items-center gap-3">
+                            <div class="w-9 h-9 bg-accent/10 rounded-[10px] flex items-center justify-center">
+                                <i class="fas fa-video text-accent text-sm"></i>
+                            </div>
+                            <span class="text-sm text-gray-dark">直播预约</span>
+                        </div>
+                        <i class="fas fa-chevron-right text-gray-mid text-xs"></i>
+                    </div>
+                    <div onclick="showDevToast()" class="click-scale flex items-center justify-between p-4 border-b border-gray-100 cursor-pointer active:bg-gray-50">
+                        <div class="flex items-center gap-3">
+                            <div class="w-9 h-9 bg-success/10 rounded-[10px] flex items-center justify-center">
+                                <i class="fas fa-certificate text-success text-sm"></i>
+                            </div>
+                            <span class="text-sm text-gray-dark">我的证书</span>
+                        </div>
+                        <i class="fas fa-chevron-right text-gray-mid text-xs"></i>
+                    </div>
+                    <div onclick="showDevToast()" class="click-scale flex items-center justify-between p-4 cursor-pointer active:bg-gray-50">
+                        <div class="flex items-center gap-3">
+                            <div class="w-9 h-9 bg-primary/10 rounded-[10px] flex items-center justify-center">
+                                <i class="fas fa-download text-primary text-sm"></i>
+                            </div>
+                            <span class="text-sm text-gray-dark">资料下载</span>
+                        </div>
+                        <i class="fas fa-chevron-right text-gray-mid text-xs"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="px-4 mt-4 pb-24">
+                <div class="bg-white rounded-[12px] shadow-[0_2px_12px_rgba(0,0,0,0.06)] overflow-hidden">
+                    <div onclick="showContactModal()" class="click-scale flex items-center justify-between p-4 border-b border-gray-100 cursor-pointer active:bg-gray-50">
+                        <div class="flex items-center gap-3">
+                            <div class="w-9 h-9 bg-primary/10 rounded-[10px] flex items-center justify-center">
+                                <i class="fas fa-headset text-primary text-sm"></i>
+                            </div>
+                            <span class="text-sm text-gray-dark">联系客服</span>
+                        </div>
+                        <i class="fas fa-chevron-right text-gray-mid text-xs"></i>
+                    </div>
+                    <div onclick="showSettingsModal()" class="click-scale flex items-center justify-between p-4 cursor-pointer active:bg-gray-50">
+                        <div class="flex items-center gap-3">
+                            <div class="w-9 h-9 bg-gray-100 rounded-[10px] flex items-center justify-center">
+                                <i class="fas fa-cog text-gray-mid text-sm"></i>
+                            </div>
+                            <span class="text-sm text-gray-dark">设置</span>
+                        </div>
+                        <i class="fas fa-chevron-right text-gray-mid text-xs"></i>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 课程详情弹窗 -->
+        <div id="courseDetailModal" class="modal-backdrop fixed inset-0 bg-black/50 z-[100] flex items-end justify-center sm:items-center" style="width: 375px; left: 50%; transform: translateX(-50%); display: none;" onclick="if(event.target===this)closeCourseDetail()">
+            <div class="bg-white rounded-t-[16px] sm:rounded-[16px] shadow-[0_25px_80px_rgba(0,0,0,0.25)] w-full max-h-[85vh] overflow-hidden animate-slide-up sm:w-[340px]">
+                <div class="relative h-40">
+                    <img id="courseDetailImage" src="" class="w-full h-full object-cover object-top" alt="课程封面">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                    <button onclick="closeCourseDetail()" class="click-scale absolute top-3 right-3 w-8 h-8 bg-black/30 rounded-full flex items-center justify-center text-white">
+                        <i class="fas fa-times text-sm"></i>
+                    </button>
+                    <div class="absolute bottom-3 left-4">
+                        <h3 id="courseDetailTitle" class="text-white font-bold text-base"></h3>
+                        <p class="text-white/70 text-[10px] mt-0.5">医药学堂精品课程</p>
+                    </div>
+                </div>
+                <div class="p-5 space-y-4 overflow-y-auto max-h-[50vh]">
+                    <div class="flex items-center gap-3">
+                        <img id="courseDetailAvatar" src="" class="w-10 h-10 rounded-full object-cover object-top" alt="讲师">
+                        <div>
+                            <p id="courseDetailTeacher" class="font-bold text-gray-dark text-sm"></p>
+                            <p id="courseDetailTitle2" class="text-[10px] text-gray-mid"></p>
+                        </div>
+                    </div>
+                    <div>
+                        <h4 class="text-xs font-bold text-gray-dark mb-2">课程介绍</h4>
+                        <p class="text-xs text-gray-mid leading-relaxed">本课程专为医药从业者设计，系统讲解专业知识，帮助学员快速掌握核心技能。课程包含视频讲解、案例分析、模拟练习等多种学习形式。</p>
+                    </div>
+                    <div>
+                        <h4 class="text-xs font-bold text-gray-dark mb-2">课程大纲</h4>
+                        <div class="space-y-2">
+                            <div class="flex items-center gap-2 p-2 bg-gray-light rounded-[6px]">
+                                <span class="w-5 h-5 bg-primary text-white text-[10px] rounded-full flex items-center justify-center shrink-0">1</span>
+                                <span class="text-xs text-gray-dark">基础理论精讲</span>
+                            </div>
+                            <div class="flex items-center gap-2 p-2 bg-gray-light rounded-[6px]">
+                                <span class="w-5 h-5 bg-primary text-white text-[10px] rounded-full flex items-center justify-center shrink-0">2</span>
+                                <span class="text-xs text-gray-dark">实操案例分析</span>
+                            </div>
+                            <div class="flex items-center gap-2 p-2 bg-gray-light rounded-[6px]">
+                                <span class="w-5 h-5 bg-primary text-white text-[10px] rounded-full flex items-center justify-center shrink-0">3</span>
+                                <span class="text-xs text-gray-dark">模拟考试训练</span>
+                            </div>
+                            <div class="flex items-center gap-2 p-2 bg-gray-light rounded-[6px]">
+                                <span class="w-5 h-5 bg-primary text-white text-[10px] rounded-full flex items-center justify-center shrink-0">4</span>
+                                <span class="text-xs text-gray-dark">考前冲刺辅导</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between p-3 bg-accent/10 rounded-[8px]">
+                        <div>
+                            <p class="text-xs text-gray-mid">课程价格</p>
+                            <p class="text-lg font-bold text-accent">¥1,680</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-xs text-gray-mid">已有 <span class="text-primary font-medium">4,560</span> 人报名</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="px-5 py-4 border-t border-gray-100 flex gap-3">
+                    <button onclick="closeCourseDetail()" class="click-scale flex-1 border border-gray-300 text-gray-mid py-2.5 rounded-[8px] text-xs font-medium">
+                        稍后再看
+                    </button>
+                    <button onclick="showToast('报名成功！专属顾问将联系您', 'fa-check-circle')" class="click-scale flex-1 bg-primary text-white py-2.5 rounded-[8px] text-xs font-medium flex items-center justify-center gap-1.5">
+                        <i class="fas fa-check text-[10px]"></i>
+                        立即报名
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 咨询方式弹窗 -->
+        <div id="consultModal" class="modal-backdrop fixed inset-0 bg-black/50 z-[100] flex items-end justify-center sm:items-center" style="width: 375px; left: 50%; transform: translateX(-50%); display: none;" onclick="if(event.target===this)this.style.display='none'">
+            <div class="bg-white rounded-t-[16px] sm:rounded-[16px] shadow-[0_25px_80px_rgba(0,0,0,0.25)] w-full animate-slide-up sm:w-[320px]">
+                <div class="p-5">
+                    <h4 class="text-base font-bold text-gray-dark text-center mb-4">选择咨询方式</h4>
+                    <div class="space-y-3">
+                        <button onclick="showToast('正在拨打客服电话...', 'fa-phone')" class="click-scale w-full flex items-center gap-3 p-3 rounded-[10px] border border-gray-200 active:border-primary active:bg-primary/5">
+                            <div class="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
+                                <i class="fas fa-phone-alt text-primary"></i>
+                            </div>
+                            <div class="text-left">
+                                <p class="text-sm font-medium text-gray-dark">电话咨询</p>
+                                <p class="text-[10px] text-gray-mid">400-888-8888</p>
+                            </div>
+                        </button>
+                        <button onclick="showToast('已复制客服微信号', 'fa-weixin')" class="click-scale w-full flex items-center gap-3 p-3 rounded-[10px] border border-gray-200 active:border-primary active:bg-primary/5">
+                            <div class="w-10 h-10 bg-success/10 rounded-full flex items-center justify-center">
+                                <i class="fab fa-weixin text-success"></i>
+                            </div>
+                            <div class="text-left">
+                                <p class="text-sm font-medium text-gray-dark">微信咨询</p>
+                                <p class="text-[10px] text-gray-mid">添加专属顾问微信</p>
+                            </div>
+                        </button>
+                        <button onclick="showToast('正在连接在线客服...', 'fa-headset')" class="click-scale w-full flex items-center gap-3 p-3 rounded-[10px] border border-gray-200 active:border-primary active:bg-primary/5">
+                            <div class="w-10 h-10 bg-accent/10 rounded-full flex items-center justify-center">
+                                <i class="fas fa-headset text-accent"></i>
+                            </div>
+                            <div class="text-left">
+                                <p class="text-sm font-medium text-gray-dark">在线客服</p>
+                                <p class="text-[10px] text-gray-mid">工作日 9:00-18:00</p>
+                            </div>
+                        </button>
+                    </div>
+                    <button onclick="document.getElementById('consultModal').style.display='none'" class="click-scale w-full mt-4 py-2.5 text-gray-mid text-sm font-medium">
+                        取消
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 分享选项弹窗 -->
+        <div id="shareModal" class="modal-backdrop fixed inset-0 bg-black/50 z-[100] flex items-end justify-center sm:items-center" style="width: 375px; left: 50%; transform: translateX(-50%); display: none;" onclick="if(event.target===this)this.style.display='none'">
+            <div class="bg-white rounded-t-[16px] sm:rounded-[16px] shadow-[0_25px_80px_rgba(0,0,0,0.25)] w-full animate-slide-up sm:w-[320px]">
+                <div class="p-5">
+                    <h4 class="text-base font-bold text-gray-dark text-center mb-4">分享到</h4>
+                    <div class="grid grid-cols-3 gap-4">
+                        <button onclick="showToast('已唤起微信分享', 'fa-weixin')" class="click-scale flex flex-col items-center gap-2">
+                            <div class="w-12 h-12 bg-success/10 rounded-full flex items-center justify-center">
+                                <i class="fab fa-weixin text-success text-xl"></i>
+                            </div>
+                            <span class="text-xs text-gray-dark">微信好友</span>
+                        </button>
+                        <button onclick="showToast('已唤起朋友圈分享', 'fa-camera')" class="click-scale flex flex-col items-center gap-2">
+                            <div class="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
+                                <i class="fas fa-camera text-primary text-xl"></i>
+                            </div>
+                            <span class="text-xs text-gray-dark">朋友圈</span>
+                        </button>
+                        <button onclick="showToast('链接已复制到剪贴板', 'fa-link')" class="click-scale flex flex-col items-center gap-2">
+                            <div class="w-12 h-12 bg-accent/10 rounded-full flex items-center justify-center">
+                                <i class="fas fa-link text-accent text-xl"></i>
+                            </div>
+                            <span class="text-xs text-gray-dark">复制链接</span>
+                        </button>
+                    </div>
+                    <button onclick="document.getElementById('shareModal').style.display='none'" class="click-scale w-full mt-6 py-2.5 text-gray-mid text-sm font-medium border-t border-gray-100">
+                        取消
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 客服联系方式弹窗 -->
+        <div id="contactModal" class="modal-backdrop fixed inset-0 bg-black/50 z-[100] flex items-end justify-center sm:items-center" style="width: 375px; left: 50%; transform: translateX(-50%); display: none;" onclick="if(event.target===this)this.style.display='none'">
+            <div class="bg-white rounded-t-[16px] sm:rounded-[16px] shadow-[0_25px_80px_rgba(0,0,0,0.25)] w-full animate-slide-up sm:w-[320px]">
+                <div class="p-5">
+                    <h4 class="text-base font-bold text-gray-dark text-center mb-4">联系客服</h4>
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between p-3 bg-gray-light rounded-[8px]">
+                            <div class="flex items-center gap-3">
+                                <i class="fas fa-phone text-primary"></i>
+                                <span class="text-sm text-gray-dark">客服热线</span>
+                            </div>
+                            <span class="text-sm font-medium text-primary">400-888-8888</span>
+                        </div>
+                        <div class="flex items-center justify-between p-3 bg-gray-light rounded-[8px]">
+                            <div class="flex items-center gap-3">
+                                <i class="fab fa-weixin text-success"></i>
+                                <span class="text-sm text-gray-dark">客服微信</span>
+                            </div>
+                            <span class="text-sm font-medium text-primary">yaoxuekefu</span>
+                        </div>
+                        <div class="flex items-center justify-between p-3 bg-gray-light rounded-[8px]">
+                            <div class="flex items-center gap-3">
+                                <i class="fas fa-envelope text-accent"></i>
+                                <span class="text-sm text-gray-dark">客服邮箱</span>
+                            </div>
+                            <span class="text-sm font-medium text-primary">service@yx.com</span>
+                        </div>
+                    </div>
+                    <p class="text-[10px] text-gray-mid text-center mt-4">工作时间：周一至周五 9:00-18:00</p>
+                    <button onclick="document.getElementById('contactModal').style.display='none'" class="click-scale w-full mt-4 py-2.5 text-gray-mid text-sm font-medium border-t border-gray-100">
+                        关闭
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 设置选项弹窗 -->
+        <div id="settingsModal" class="modal-backdrop fixed inset-0 bg-black/50 z-[100] flex items-end justify-center sm:items-center" style="width: 375px; left: 50%; transform: translateX(-50%); display: none;" onclick="if(event.target===this)this.style.display='none'">
+            <div class="bg-white rounded-t-[16px] sm:rounded-[16px] shadow-[0_25px_80px_rgba(0,0,0,0.25)] w-full animate-slide-up sm:w-[320px]">
+                <div class="p-5">
+                    <h4 class="text-base font-bold text-gray-dark text-center mb-4">设置</h4>
+                    <div class="space-y-1">
+                        <div class="flex items-center justify-between p-3 active:bg-gray-50 rounded-[8px] cursor-pointer">
+                            <span class="text-sm text-gray-dark">消息通知</span>
+                            <div class="w-10 h-6 bg-primary rounded-full relative">
+                                <div class="absolute right-0.5 top-0.5 w-5 h-5 bg-white rounded-full shadow-sm"></div>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between p-3 active:bg-gray-50 rounded-[8px] cursor-pointer">
+                            <span class="text-sm text-gray-dark">自动播放视频</span>
+                            <div class="w-10 h-6 bg-gray-200 rounded-full relative">
+                                <div class="absolute left-0.5 top-0.5 w-5 h-5 bg-white rounded-full shadow-sm"></div>
+                            </div>
+                        </div>
+                        <div onclick="showToast('已清除缓存', 'fa-trash')" class="click-scale flex items-center justify-between p-3 active:bg-gray-50 rounded-[8px] cursor-pointer">
+                            <span class="text-sm text-gray-dark">清除缓存</span>
+                            <span class="text-xs text-gray-mid">12.5MB</span>
+                        </div>
+                        <div onclick="showToast('当前已是最新版本', 'fa-check')" class="click-scale flex items-center justify-between p-3 active:bg-gray-50 rounded-[8px] cursor-pointer">
+                            <span class="text-sm text-gray-dark">检查更新</span>
+                            <span class="text-xs text-gray-mid">v2.1.0</span>
+                        </div>
+                    </div>
+                    <button onclick="document.getElementById('settingsModal').style.display='none'" class="click-scale w-full mt-4 py-2.5 text-warning text-sm font-medium border-t border-gray-100">
+                        退出登录
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 更多选项弹窗 -->
+        <div id="moreOptionsModal" class="modal-backdrop fixed inset-0 bg-black/50 z-[100] flex items-end justify-center sm:items-center" style="width: 375px; left: 50%; transform: translateX(-50%); display: none;" onclick="if(event.target===this)this.style.display='none'">
+            <div class="bg-white rounded-t-[16px] sm:rounded-[16px] shadow-[0_25px_80px_rgba(0,0,0,0.25)] w-full animate-slide-up sm:w-[320px]">
+                <div class="p-5">
+                    <div class="grid grid-cols-4 gap-4">
+                        <button onclick="showToast('已刷新页面', 'fa-sync')" class="click-scale flex flex-col items-center gap-2">
+                            <div class="w-10 h-10 bg-gray-light rounded-full flex items-center justify-center">
+                                <i class="fas fa-sync text-gray-mid"></i>
+                            </div>
+                            <span class="text-[10px] text-gray-dark">刷新</span>
+                        </button>
+                        <button onclick="showToast('已添加到收藏', 'fa-star')" class="click-scale flex flex-col items-center gap-2">
+                            <div class="w-10 h-10 bg-gray-light rounded-full flex items-center justify-center">
+                                <i class="far fa-star text-gray-mid"></i>
+                            </div>
+                            <span class="text-[10px] text-gray-dark">收藏</span>
+                        </button>
+                        <button onclick="showShareOptions()" class="click-scale flex flex-col items-center gap-2">
+                            <div class="w-10 h-10 bg-gray-light rounded-full flex items-center justify-center">
+                                <i class="fas fa-share-alt text-gray-mid"></i>
+                            </div>
+                            <span class="text-[10px] text-gray-dark">分享</span>
+                        </button>
+                        <button onclick="showToast('已反馈问题', 'fa-flag')" class="click-scale flex flex-col items-center gap-2">
+                            <div class="w-10 h-10 bg-gray-light rounded-full flex items-center justify-center">
+                                <i class="far fa-flag text-gray-mid"></i>
+                            </div>
+                            <span class="text-[10px] text-gray-dark">反馈</span>
+                        </button>
+                    </div>
+                    <button onclick="document.getElementById('moreOptionsModal').style.display='none'" class="click-scale w-full mt-5 py-2.5 text-gray-mid text-sm font-medium border-t border-gray-100">
+                        取消
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 底部导航 -->
+        <nav class="fixed bottom-0 z-50 bg-white border-t border-gray-100 safe-area-bottom" style="width: 375px;">
+            <div class="flex items-center justify-around py-2">
+                <button onclick="switchTab('home')" class="nav-item flex flex-col items-center gap-0.5 py-1 px-4 click-scale" data-tab="home">
+                    <div class="w-6 h-6 flex items-center justify-center tab-icon rounded-[6px] transition-all bg-primary text-white">
+                        <i class="fas fa-home text-xs"></i>
+                    </div>
+                    <span class="text-[10px] font-medium text-primary">首页</span>
+                </button>
+                <button onclick="switchTab('courses')" class="nav-item flex flex-col items-center gap-0.5 py-1 px-4 click-scale" data-tab="courses">
+                    <div class="w-6 h-6 flex items-center justify-center tab-icon rounded-[6px] transition-all bg-transparent text-gray-mid">
+                        <i class="fas fa-book text-xs"></i>
+                    </div>
+                    <span class="text-[10px] font-medium text-gray-mid">课程</span>
+                </button>
+                <button onclick="switchTab('live')" class="nav-item flex flex-col items-center gap-0.5 py-1 px-4 click-scale" data-tab="live">
+                    <div class="w-6 h-6 flex items-center justify-center tab-icon rounded-[6px] transition-all bg-transparent text-gray-mid">
+                        <i class="fas fa-video text-xs"></i>
+                    </div>
+                    <span class="text-[10px] font-medium text-gray-mid">直播</span>
+                </button>
+                <button onclick="switchTab('poster')" class="nav-item flex flex-col items-center gap-0.5 py-1 px-4 click-scale" data-tab="poster">
+                    <div class="w-6 h-6 flex items-center justify-center tab-icon rounded-[6px] transition-all bg-transparent text-gray-mid">
+                        <i class="fas fa-image text-xs"></i>
+                    </div>
+                    <span class="text-[10px] font-medium text-gray-mid">海报</span>
+                </button>
+                <button onclick="switchTab('profile')" class="nav-item flex flex-col items-center gap-0.5 py-1 px-4 click-scale" data-tab="profile">
+                    <div class="w-6 h-6 flex items-center justify-center tab-icon rounded-[6px] transition-all bg-transparent text-gray-mid">
+                        <i class="fas fa-user text-xs"></i>
+                    </div>
+                    <span class="text-[10px] font-medium text-gray-mid">我的</span>
+                </button>
+            </div>
+        </nav>
+    </div>
+
+    <script>
+        // Toast提示系统
+        function showToast(message, icon = 'fa-check-circle') {
+            const toast = document.getElementById('globalToast');
+            const toastMessage = document.getElementById('toastMessage');
+            const toastIcon = document.getElementById('toastIcon');
+            
+            toastMessage.textContent = message;
+            toastIcon.className = `fas ${icon} text-success`;
+            
+            toast.classList.remove('hidden');
+            toast.classList.add('toast-enter');
+            toast.classList.remove('toast-exit');
+            
+            setTimeout(() => {
+                toast.classList.remove('toast-enter');
+                toast.classList.add('toast-exit');
+                setTimeout(() => {
+                    toast.classList.add('hidden');
+                }, 300);
+            }, 2500);
+        }
+
+        // 标签页切换
+        function switchTab(tabName) {
+            // 隐藏所有视图
+            document.querySelectorAll('.view-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // 显示目标视图
+            document.getElementById(`view-${tabName}`).classList.add('active');
+            
+            // 更新导航状态
+            document.querySelectorAll('.nav-item').forEach(item => {
+                const iconDiv = item.querySelector('.tab-icon');
+                const textSpan = item.querySelector('span');
+                
+                if (item.dataset.tab === tabName) {
+                    iconDiv.classList.remove('bg-transparent', 'text-gray-mid');
+                    iconDiv.classList.add('bg-primary', 'text-white');
+                    textSpan.classList.remove('text-gray-mid');
+                    textSpan.classList.add('text-primary');
+                } else {
+                    iconDiv.classList.remove('bg-primary', 'text-white');
+                    iconDiv.classList.add('bg-transparent', 'text-gray-mid');
+                    textSpan.classList.remove('text-primary');
+                    textSpan.classList.add('text-gray-mid');
+                }
+            });
+        }
+
+        // 分类标签切换
+        function switchCategory(btn, category) {
+            const container = btn.parentElement;
+            container.querySelectorAll('.tag-pill').forEach(pill => {
+                pill.classList.remove('bg-primary', 'text-white');
+                pill.classList.add('bg-gray-light', 'text-gray-mid');
+            });
+            btn.classList.remove('bg-gray-light', 'text-gray-mid');
+            btn.classList.add('bg-primary', 'text-white');
+            
+            showToast(`已切换到：${category}`, 'fa-tag');
+        }
+
+        // 从快捷入口切换分类
+        function switchToCategory(category) {
+            switchTab('courses');
+            // 找到课程页面的对应标签并激活
+            const courseTags = document.getElementById('courseCategoryTags');
+            courseTags.querySelectorAll('.tag-pill').forEach(pill => {
+                if (pill.textContent.trim() === category) {
+                    switchCategory(pill, category);
+                }
+            });
+        }
+
+        // 进入直播间
+        function enterLiveRoom() {
+            switchTab('live');
+            showToast('已进入直播间', 'fa-video');
+        }
+
+        // 预约直播
+        function bookLive(btn) {
+            btn.textContent = '已预约';
+            btn.classList.remove('border-primary', 'text-primary');
+            btn.classList.add('bg-gray-100', 'text-gray-mid', 'border-gray-100');
+            btn.disabled = true;
+            btn.onclick = null;
+            showToast('预约成功！开播前将通知您', 'fa-bell');
+        }
+
+        // 观看回放
+        function playReplay() {
+            showToast('正在加载回放...', 'fa-spinner fa-spin');
+            setTimeout(() => {
+                showToast('回放加载完成', 'fa-play-circle');
+            }, 1500);
+        }
+
+        // 发送评论
+        function sendChat() {
+            const input = document.getElementById('chatInput');
+            const chatArea = document.getElementById('chatArea');
+            const message = input.value.trim();
+            
+            if (!message) {
+                showToast('请输入评论内容', 'fa-exclamation-circle');
+                return;
+            }
+            
+            const newChat = document.createElement('div');
+            newChat.className = 'chat-item flex gap-1.5';
+            newChat.innerHTML = `
+                <span class="text-[10px] font-medium text-primary shrink-0">我:</span>
+                <span class="text-[10px] text-gray-dark">${message}</span>
+            `;
+            
+            chatArea.appendChild(newChat);
+            chatArea.scrollTop = chatArea.scrollHeight;
+            input.value = '';
+            showToast('评论已发送', 'fa-paper-plane');
+        }
+
+        // 下载文件
+        function downloadFile() {
+            showToast('开始下载...', 'fa-download');
+            setTimeout(() => {
+                showToast('下载完成', 'fa-check-circle');
+            }, 2000);
+        }
+
+        // 提交问卷
+        function submitSurvey() {
+            const name = document.querySelector('input[type="text"]').value;
+            const phone = document.querySelector('input[type="tel"]').value;
+            
+            if (!name || !phone) {
+                showToast('请填写必填项', 'fa-exclamation-circle');
+                return;
+            }
+            
+            showToast('问卷提交成功！', 'fa-check-circle');
+            document.getElementById('surveyModal').style.display = 'none';
+        }
+
+        // 显示课程详情
+        function showCourseDetail(title, teacher, teacherTitle) {
+            document.getElementById('courseDetailTitle').textContent = title;
+            document.getElementById('courseDetailTeacher').textContent = teacher;
+            document.getElementById('courseDetailTitle2').textContent = teacherTitle;
+            
+            // 设置默认图片
+            document.getElementById('courseDetailImage').src = 'https://mastergo.com/ai/api/search-image?query=professional medical education course cover pharmacy medicine books classroom setting modern clean&width=640&height=360&orientation=landscape&flag=1780976443903ABCDEfghij12345KLMN&type=gen-ui-agent';
+            document.getElementById('courseDetailAvatar').src = 'https://mastergo.com/ai/api/search-image?query=professional chinese medical educator portrait formal attire confident expression hospital background&width=80&height=80&orientation=square&flag=1780976443903FGHIJklmno67890OPQR&type=gen-ui-agent';
+            
+            document.getElementById('courseDetailModal').style.display = 'flex';
+        }
+
+        // 关闭课程详情
+        function closeCourseDetail() {
+            document.getElementById('courseDetailModal').style.display = 'none';
+        }
+
+        // 保存海报
+        function savePoster() {
+            showToast('海报已保存到相册', 'fa-image');
+        }
+
+        // 显示分享选项
+        function showShareOptions() {
+            document.getElementById('shareModal').style.display = 'flex';
+        }
+
+        // 显示咨询弹窗
+        function showConsultModal() {
+            document.getElementById('consultModal').style.display = 'flex';
+        }
+
+        // 显示客服弹窗
+        function showContactModal() {
+            document.getElementById('contactModal').style.display = 'flex';
+        }
+
+        // 显示设置弹窗
+        function showSettingsModal() {
+            document.getElementById('settingsModal').style.display = 'flex';
+        }
+
+        // 显示更多选项
+        function showMoreOptions() {
+            document.getElementById('moreOptionsModal').style.display = 'flex';
+        }
+
+        // 显示开发中提示
+        function showDevToast() {
+            showToast('功能开发中，敬请期待', 'fa-tools');
+        }
+
+        // 返回按钮
+        function handleBack() {
+            showToast('返回上一页', 'fa-arrow-left');
+        }
+
+        // 回车发送评论
+        document.getElementById('chatInput')?.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendChat();
+            }
+        });
+    </script>
+</body>
+</html>
