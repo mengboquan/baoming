@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>医药代表学历提升平台</title>
+    <title>医药代表学历提升</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -139,6 +139,24 @@
 
         /* Modal animation */
         .modal-enter { animation: scale-in 0.3s ease-out; }
+        
+                /* Payment method radio styles */
+        .payment-method-item {
+            transition: all 0.2s ease;
+        }
+        .payment-method-item.selected {
+            border-color: #0d9488;
+            background: rgba(13,148,136,0.05);
+        }
+        .payment-method-item.selected .payment-check {
+            opacity: 1;
+            transform: scale(1);
+        }
+        .payment-check {
+            opacity: 0;
+            transform: scale(0);
+            transition: all 0.2s ease;
+        }
     </style>
 </head>
 <body class="text-gray-dark antialiased">
@@ -331,9 +349,6 @@
                         <button onclick="switchCategory(this, '全部')" class="tag-pill bg-primary text-white px-4 py-2 rounded-full text-xs font-medium whitespace-nowrap click-scale">全部</button>
                         <button onclick="switchCategory(this, '学历提升')" class="tag-pill bg-gray-light text-gray-mid px-4 py-2 rounded-full text-xs font-medium whitespace-nowrap click-scale">学历提升</button>
                         <button onclick="switchCategory(this, '执业药师')" class="tag-pill bg-gray-light text-gray-mid px-4 py-2 rounded-full text-xs font-medium whitespace-nowrap click-scale">执业药师</button>
-                        <button onclick="switchCategory(this, '医药营销')" class="tag-pill bg-gray-light text-gray-mid px-4 py-2 rounded-full text-xs font-medium whitespace-nowrap click-scale">医药营销</button>
-                        <button onclick="switchCategory(this, 'GSP认证')" class="tag-pill bg-gray-light text-gray-mid px-4 py-2 rounded-full text-xs font-medium whitespace-nowrap click-scale">GSP认证</button>
-                        <button onclick="switchCategory(this, '健康管理')" class="tag-pill bg-gray-light text-gray-mid px-4 py-2 rounded-full text-xs font-medium whitespace-nowrap click-scale">健康管理</button>
                         <button onclick="switchCategory(this, '继续教育')" class="tag-pill bg-gray-light text-gray-mid px-4 py-2 rounded-full text-xs font-medium whitespace-nowrap click-scale">继续教育</button>
                     </div>
                 </div>
@@ -442,9 +457,6 @@
                         <button onclick="switchCategory(this, '全部')" class="tag-pill bg-primary text-white px-4 py-2 rounded-full text-xs font-medium whitespace-nowrap click-scale">全部</button>
                         <button onclick="switchCategory(this, '学历提升')" class="tag-pill bg-gray-light text-gray-mid px-4 py-2 rounded-full text-xs font-medium whitespace-nowrap click-scale">学历提升</button>
                         <button onclick="switchCategory(this, '执业药师')" class="tag-pill bg-gray-light text-gray-mid px-4 py-2 rounded-full text-xs font-medium whitespace-nowrap click-scale">执业药师</button>
-                        <button onclick="switchCategory(this, '医药营销')" class="tag-pill bg-gray-light text-gray-mid px-4 py-2 rounded-full text-xs font-medium whitespace-nowrap click-scale">医药营销</button>
-                        <button onclick="switchCategory(this, 'GSP认证')" class="tag-pill bg-gray-light text-gray-mid px-4 py-2 rounded-full text-xs font-medium whitespace-nowrap click-scale">GSP认证</button>
-                        <button onclick="switchCategory(this, '健康管理')" class="tag-pill bg-gray-light text-gray-mid px-4 py-2 rounded-full text-xs font-medium whitespace-nowrap click-scale">健康管理</button>
                         <button onclick="switchCategory(this, '继续教育')" class="tag-pill bg-gray-light text-gray-mid px-4 py-2 rounded-full text-xs font-medium whitespace-nowrap click-scale">继续教育</button>
                     </div>
                 </div>
@@ -927,7 +939,16 @@
             <!-- Menu List -->
             <div class="px-4 -mt-4">
                 <div class="bg-white rounded-[12px] shadow-[0_2px_12px_rgba(0,0,0,0.06)] overflow-hidden">
-                    <div onclick="showDevToast()" class="click-scale flex items-center justify-between p-4 border-b border-gray-100 cursor-pointer active:bg-gray-50">
+                  <div onclick="showDevToast()" class="click-scale flex items-center justify-between p-4 border-b border-gray-100 cursor-pointer active:bg-gray-50">
+                        <div class="flex items-center gap-3">
+                            <div class="w-9 h-9 bg-primary/10 rounded-[10px] flex items-center justify-center">
+                                <i class="fas fa-shopping-bag text-primary text-sm"></i>
+                            </div>
+                            <span class="text-sm text-gray-dark">我的订单</span>
+                        </div>
+                        <i class="fas fa-chevron-right text-gray-mid text-xs"></i>
+                    </div>
+                  <div onclick="showDevToast()" class="click-scale flex items-center justify-between p-4 border-b border-gray-100 cursor-pointer active:bg-gray-50">
                         <div class="flex items-center gap-3">
                             <div class="w-9 h-9 bg-primary/10 rounded-[10px] flex items-center justify-center">
                                 <i class="fas fa-book text-primary text-sm"></i>
@@ -1051,10 +1072,175 @@
                     <button onclick="closeCourseDetail()" class="click-scale flex-1 border border-gray-300 text-gray-mid py-2.5 rounded-[8px] text-xs font-medium">
                         稍后再看
                     </button>
-                    <button onclick="showToast('报名成功！专属顾问将联系您', 'fa-check-circle')" class="click-scale flex-1 bg-primary text-white py-2.5 rounded-[8px] text-xs font-medium flex items-center justify-center gap-1.5">
-                        <i class="fas fa-check text-[10px]"></i>
-                        立即报名
+                        <button onclick="openEnrollModal()" class="click-scale btn-primary flex-1 bg-gradient-to-r from-primary to-primary-light text-white py-3 rounded-[10px] font-semibold text-sm shadow-[0_4px_15px_rgba(13,148,136,0.3)]">
+                            立即报名
+                        </button>
+                </div>
+            </div>
+        </div>
+                <!-- 报名信息填写弹窗 -->
+        <div id="enrollModal" class="modal-backdrop fixed inset-0 bg-black/60 z-[100] flex items-end justify-center sm:items-center" style="width: 375px; left: 50%; transform: translateX(-50%); display: none;" onclick="if(event.target===this)closeEnrollModal()">
+            <div class="bg-white rounded-t-[20px] sm:rounded-[20px] shadow-[0_25px_80px_rgba(0,0,0,0.3)] w-full max-h-[85vh] overflow-hidden animate-slide-up sm:w-[355px]">
+                <div class="px-5 py-4 border-b border-gray-100 flex items-center justify-between">
+                    <h4 class="text-gray-dark font-bold text-base">填写报名信息</h4>
+                    <button onclick="closeEnrollModal()" class="click-scale w-8 h-8 flex items-center justify-center text-gray-mid hover:text-gray-dark transition-colors">
+                        <i class="fas fa-times text-sm"></i>
                     </button>
+                </div>
+                <div class="p-5 space-y-4 overflow-y-auto max-h-[55vh]">
+                    <!-- 姓名 -->
+                    <div>
+                        <label class="block text-xs font-medium text-gray-dark mb-2">
+                            姓名 <span class="text-warning">*</span>
+                        </label>
+                        <input type="text" id="enrollName" placeholder="请输入您的真实姓名" class="w-full p-3 rounded-[10px] border border-gray-200 text-sm text-gray-dark placeholder-gray-mid focus:outline-none input-focus transition-all">
+                        <p id="nameError" class="text-[10px] text-warning mt-1 hidden">请输入姓名</p>
+                    </div>
+                    <!-- 手机号 -->
+                    <div>
+                        <label class="block text-xs font-medium text-gray-dark mb-2">
+                            手机号 <span class="text-warning">*</span>
+                        </label>
+                        <input type="tel" id="enrollPhone" placeholder="请输入您的手机号码" maxlength="11" class="w-full p-3 rounded-[10px] border border-gray-200 text-sm text-gray-dark placeholder-gray-mid focus:outline-none input-focus transition-all">
+                        <p id="phoneError" class="text-[10px] text-warning mt-1 hidden">请输入正确的手机号</p>
+                    </div>
+                    <!-- 邮箱 -->
+                    <div>
+                        <label class="block text-xs font-medium text-gray-dark mb-2">
+                            邮箱 <span class="text-gray-mid">（选填）</span>
+                        </label>
+                        <input type="email" id="enrollEmail" placeholder="请输入您的邮箱地址" class="w-full p-3 rounded-[10px] border border-gray-200 text-sm text-gray-dark placeholder-gray-mid focus:outline-none input-focus transition-all">
+                    </div>
+                    <!-- 备注 -->
+                    <div>
+                        <label class="block text-xs font-medium text-gray-dark mb-2">
+                            备注 <span class="text-gray-mid">（选填）</span>
+                        </label>
+                        <textarea id="enrollRemark" placeholder="如有特殊需求请在此说明" rows="3" class="w-full p-3 rounded-[10px] border border-gray-200 text-sm text-gray-dark placeholder-gray-mid focus:outline-none input-focus transition-all resize-none"></textarea>
+                    </div>
+                </div>
+                <div class="p-5 border-t border-gray-100 bg-gray-light/30 flex gap-3">
+                    <button onclick="closeEnrollModal()" class="click-scale flex-1 bg-white border border-gray-300 text-gray-dark py-3 rounded-[10px] font-medium text-sm">
+                        取消
+                    </button>
+                    <button onclick="goToPayment()" class="click-scale btn-primary flex-1 bg-gradient-to-r from-primary to-primary-light text-white py-3 rounded-[10px] font-semibold text-sm shadow-[0_4px_15px_rgba(13,148,136,0.3)]">
+                        下一步
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 转账/支付页面 -->
+        <div id="paymentModal" class="modal-backdrop fixed inset-0 bg-black/60 z-[110] flex items-end justify-center sm:items-center" style="width: 375px; left: 50%; transform: translateX(-50%); display: none;" onclick="if(event.target===this)closePaymentModal()">
+            <div class="bg-white rounded-t-[20px] sm:rounded-[20px] shadow-[0_25px_80px_rgba(0,0,0,0.3)] w-full max-h-[85vh] overflow-hidden animate-slide-up sm:w-[355px]">
+                <div class="px-5 py-4 border-b border-gray-100 flex items-center justify-between">
+                    <h4 class="text-gray-dark font-bold text-base">确认支付</h4>
+                    <button onclick="closePaymentModal()" class="click-scale w-8 h-8 flex items-center justify-center text-gray-mid hover:text-gray-dark transition-colors">
+                        <i class="fas fa-times text-sm"></i>
+                    </button>
+                </div>
+                <div class="p-5 overflow-y-auto max-h-[55vh]">
+                    <!-- 课程信息 -->
+                    <div class="bg-gray-light/50 rounded-[12px] p-4 mb-5">
+                        <p class="text-[10px] text-gray-mid mb-1">课程名称</p>
+                        <p id="paymentCourseName" class="text-sm font-bold text-gray-dark mb-3"></p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs text-gray-mid">课程价格</span>
+                            <span id="paymentCoursePrice" class="text-lg font-bold text-warning"></span>
+                        </div>
+                    </div>
+                    <!-- 支付方式 -->
+                    <p class="text-xs font-medium text-gray-dark mb-3">选择支付方式</p>
+                    <div class="space-y-2 mb-5">
+                        <!-- 微信支付 -->
+                        <div id="payWechat" onclick="selectPayment('wechat')" class="payment-method-item selected flex items-center gap-3 p-3.5 rounded-[10px] border-2 border-primary bg-primary/5 cursor-pointer">
+                            <div class="w-9 h-9 bg-[#07c160] rounded-[8px] flex items-center justify-center shrink-0">
+                                <i class="fab fa-weixin text-white text-lg"></i>
+                            </div>
+                            <div class="flex-1">
+                                <p class="text-sm font-medium text-gray-dark">微信支付</p>
+                                <p class="text-[10px] text-gray-mid">推荐使用微信支付</p>
+                            </div>
+                            <div class="payment-check w-5 h-5 bg-primary rounded-full flex items-center justify-center">
+                                <i class="fas fa-check text-white text-[10px]"></i>
+                            </div>
+                        </div>
+                        <!-- 支付宝 -->
+                        <div id="payAlipay" onclick="selectPayment('alipay')" class="payment-method-item flex items-center gap-3 p-3.5 rounded-[10px] border-2 border-gray-200 cursor-pointer">
+                            <div class="w-9 h-9 bg-[#1677ff] rounded-[8px] flex items-center justify-center shrink-0">
+                                <i class="fab fa-alipay text-white text-lg"></i>
+                            </div>
+                            <div class="flex-1">
+                                <p class="text-sm font-medium text-gray-dark">支付宝</p>
+                                <p class="text-[10px] text-gray-mid">支持花呗分期</p>
+                            </div>
+                            <div class="payment-check w-5 h-5 bg-primary rounded-full flex items-center justify-center">
+                                <i class="fas fa-check text-white text-[10px]"></i>
+                            </div>
+                        </div>
+                        <!-- 银行卡 -->
+                        <div id="payBank" onclick="selectPayment('bank')" class="payment-method-item flex items-center gap-3 p-3.5 rounded-[10px] border-2 border-gray-200 cursor-pointer">
+                            <div class="w-9 h-9 bg-gray-dark rounded-[8px] flex items-center justify-center shrink-0">
+                                <i class="fas fa-credit-card text-white text-sm"></i>
+                            </div>
+                            <div class="flex-1">
+                                <p class="text-sm font-medium text-gray-dark">银行卡</p>
+                                <p class="text-[10px] text-gray-mid">支持储蓄卡/信用卡</p>
+                            </div>
+                            <div class="payment-check w-5 h-5 bg-primary rounded-full flex items-center justify-center">
+                                <i class="fas fa-check text-white text-[10px]"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 支付金额 -->
+                    <div class="flex items-center justify-between py-3 border-t border-gray-100">
+                        <span class="text-sm text-gray-dark">支付金额</span>
+                        <span id="paymentAmount" class="text-xl font-bold text-warning"></span>
+                    </div>
+                </div>
+                <div class="p-5 border-t border-gray-100 bg-gray-light/30">
+                    <button onclick="confirmPayment()" class="click-scale btn-primary w-full bg-gradient-to-r from-primary to-primary-light text-white py-3.5 rounded-[10px] font-semibold text-sm shadow-[0_4px_15px_rgba(13,148,136,0.3)] flex items-center justify-center gap-2">
+                        <i class="fas fa-lock text-xs"></i>
+                        确认支付
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 支付成功页面 -->
+        <div id="paymentSuccessModal" class="modal-backdrop fixed inset-0 bg-black/60 z-[120] flex items-center justify-center" style="width: 375px; left: 50%; transform: translateX(-50%); display: none;" onclick="if(event.target===this)closePaymentSuccess()">
+            <div class="bg-white rounded-[20px] shadow-[0_25px_80px_rgba(0,0,0,0.3)] w-full mx-5 animate-scale-in sm:w-[320px]">
+                <div class="p-8 text-center">
+                    <!-- 成功图标 -->
+                    <div class="w-16 h-16 bg-success/10 rounded-full flex items-center justify-center mx-auto mb-4 success-pop">
+                        <i class="fas fa-check text-success text-2xl"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-gray-dark mb-1">报名成功</h3>
+                    <p class="text-xs text-gray-mid mb-6">恭喜您成功报名课程</p>
+                    <!-- 课程信息 -->
+                    <div class="bg-gray-light/50 rounded-[12px] p-4 mb-6 text-left">
+                        <p class="text-[10px] text-gray-mid mb-1">课程名称</p>
+                        <p id="successCourseName" class="text-sm font-bold text-gray-dark mb-3"></p>
+                        <div class="flex items-center gap-4">
+                            <div>
+                                <p class="text-[10px] text-gray-mid">上课时间</p>
+                                <p class="text-xs font-medium text-gray-dark">2024年3月15日 19:30</p>
+                            </div>
+                            <div>
+                                <p class="text-[10px] text-gray-mid">课程有效期</p>
+                                <p class="text-xs font-medium text-gray-dark">365天</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 按钮 -->
+                    <div class="flex gap-3">
+                        <button onclick="closePaymentSuccess(); showToast('查看订单', 'fa-file-alt')" class="click-scale flex-1 bg-white border border-gray-300 text-gray-dark py-3 rounded-[10px] font-medium text-sm">
+                            查看订单
+                        </button>
+                        <button onclick="closePaymentSuccess(); switchTab('home')" class="click-scale btn-primary flex-1 bg-gradient-to-r from-primary to-primary-light text-white py-3 rounded-[10px] font-semibold text-sm shadow-[0_4px_15px_rgba(13,148,136,0.3)]">
+                            返回首页
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1150,7 +1336,7 @@
                                 <i class="fab fa-weixin text-success"></i>
                                 <span class="text-sm text-gray-dark">客服微信</span>
                             </div>
-                            <span class="text-sm font-medium text-primary">yaoxuekefu</span>
+                            <span class="text-sm font-medium text-primary">shan kang</span>
                         </div>
                         <div class="flex items-center justify-between p-3 bg-gray-light rounded-[8px]">
                             <div class="flex items-center gap-3">
@@ -1377,29 +1563,6 @@
             }, 1500);
         }
 
-        // 发送评论
-        function sendChat() {
-            const input = document.getElementById('chatInput');
-            const chatArea = document.getElementById('chatArea');
-            const message = input.value.trim();
-            
-            if (!message) {
-                showToast('请输入评论内容', 'fa-exclamation-circle');
-                return;
-            }
-            
-            const newChat = document.createElement('div');
-            newChat.className = 'chat-item flex gap-1.5';
-            newChat.innerHTML = `
-                <span class="text-[10px] font-medium text-primary shrink-0">我:</span>
-                <span class="text-[10px] text-gray-dark">${message}</span>
-            `;
-            
-            chatArea.appendChild(newChat);
-            chatArea.scrollTop = chatArea.scrollHeight;
-            input.value = '';
-            showToast('评论已发送', 'fa-paper-plane');
-        }
 
         // 下载文件
         function downloadFile() {
@@ -1487,6 +1650,139 @@
                 sendChat();
             }
         });
+                // 打开报名弹窗
+        function openEnrollModal() {
+            closeCourseDetail();
+            document.getElementById('enrollModal').style.display = 'flex';
+            // 重置表单
+            document.getElementById('enrollName').value = '';
+            document.getElementById('enrollPhone').value = '';
+            document.getElementById('enrollEmail').value = '';
+            document.getElementById('enrollRemark').value = '';
+            document.getElementById('nameError').classList.add('hidden');
+            document.getElementById('phoneError').classList.add('hidden');
+            document.querySelectorAll('#enrollModal input, #enrollModal textarea').forEach(el => {
+                el.classList.remove('input-error');
+            });
+        }
+
+        // 关闭报名弹窗
+        function closeEnrollModal() {
+            document.getElementById('enrollModal').style.display = 'none';
+        }
+
+        // 验证手机号
+        function validatePhone(phone) {
+            return /^1[3-9]\d{9}$/.test(phone);
+        }
+
+        // 前往支付页面
+        function goToPayment() {
+            const name = document.getElementById('enrollName').value.trim();
+            const phone = document.getElementById('enrollPhone').value.trim();
+            
+            let hasError = false;
+            
+            // 验证姓名
+            if (!name) {
+                document.getElementById('nameError').classList.remove('hidden');
+                document.getElementById('enrollName').classList.add('input-error');
+                hasError = true;
+            } else {
+                document.getElementById('nameError').classList.add('hidden');
+                document.getElementById('enrollName').classList.remove('input-error');
+            }
+            
+            // 验证手机号
+            if (!phone || !validatePhone(phone)) {
+                document.getElementById('phoneError').classList.remove('hidden');
+                document.getElementById('enrollPhone').classList.add('input-error');
+                hasError = true;
+            } else {
+                document.getElementById('phoneError').classList.add('hidden');
+                document.getElementById('enrollPhone').classList.remove('input-error');
+            }
+            
+            if (hasError) {
+                showToast('请完善报名信息', 'fa-exclamation-circle');
+                return;
+            }
+            
+            closeEnrollModal();
+            
+            //设置支付页面信息
+            document.getElementById('paymentCourseName').textContent = '国家开发大学 - 健康管理';
+            document.getElementById('paymentCoursePrice').textContent = '￥3.600';
+            document.getElementById('paymentAmount').textContent = '￥3.600';
+            
+            // 重置支付方式
+            selectPayment('wechat');
+            
+            document.getElementById('paymentModal').style.display = 'flex';
+        }
+
+        // 关闭支付页面
+        function closePaymentModal() {
+            document.getElementById('paymentModal').style.display = 'none';
+        }
+
+        // 选择支付方式
+        function selectPayment(method) {
+            selectedPaymentMethod = method;
+            
+            // 重置所有支付方式样式
+            document.querySelectorAll('.payment-method-item').forEach(el => {
+                el.classList.remove('selected');
+                el.classList.remove('border-primary');
+                el.classList.remove('bg-primary/5');
+                el.classList.add('border-gray-200');
+            });
+            
+            // 设置选中样式
+            const selectedEl = document.getElementById('pay' + method.charAt(0).toUpperCase() + method.slice(1));
+            selectedEl.classList.add('selected');
+            selectedEl.classList.remove('border-gray-200');
+        }
+
+        // 确认支付
+        function confirmPayment() {
+            closePaymentModal();
+            
+            // 显示成功页面
+            document.getElementById('successCourseName').textContent = '支付成功';
+            document.getElementById('paymentSuccessModal').style.display = 'flex';
+          
+            
+            showToast('报名成功', 'fa-check-circle');
+        }
+
+        // 关闭支付成功页面
+        function closePaymentSuccess() {
+            document.getElementById('paymentSuccessModal').style.display = 'none';
+        }
+                // 发送评论
+        function sendChat() {
+            const input = document.getElementById('chatInput');
+            const chatArea = document.getElementById('chatArea');
+            const message = input.value.trim();
+            
+            if (!message) {
+                showToast('请输入评论内容', 'fa-exclamation-circle');
+                return;
+            }
+            
+            const newChat = document.createElement('div');
+            newChat.className = 'chat-item flex gap-1.5';
+            newChat.innerHTML = `
+                <span class="text-[10px] font-medium text-primary shrink-0">我:</span>
+                <span class="text-[10px] text-gray-dark">${message}</span>
+            `;
+            
+            chatArea.appendChild(newChat);
+            chatArea.scrollTop = chatArea.scrollHeight;
+            input.value = '';
+            showToast('评论已发送', 'fa-paper-plane');
+        }
     </script>
 </body>
 </html>
